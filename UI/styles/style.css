@@ -89,7 +89,6 @@ header a:hover{
 }
 
 header li {
-  float: left;
   display: inline;
   padding: 0 20px 0 20px;
 }
@@ -201,8 +200,33 @@ header nav {
   color: #fff;
 }
 
+/* Intro Texts */
 
+#intro-texts{
+  text-align: center;
+  margin-top: 40px;
+}
 
+#intro-texts .expore-texts {
+  width: 30%;
+  text-align: center;
+  display: inline-block;
+  border-right: 2px solid #eb2365;
+  margin-right: 16px;
+  padding-right: 25px;
+}
+
+#intro-texts .agents-texts {
+  width: 30%;
+  text-align: center;
+  display: inline-block;
+}
+
+/* About texts */
+  #about-texts p {
+    text-align: center;
+    font-size: 1.1rem;
+  }
 
 /* Sign up Form  */
 #signup-form .signup-box {
@@ -266,4 +290,15 @@ header nav {
   display: inline-block;
   padding-right: 10px;
   white-space: nowrap;
+}
+
+footer {
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #eb2365;
+  text-align: center;
+  margin-top: 100px;
+  color: #fff;
 }
