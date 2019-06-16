@@ -4,6 +4,7 @@
   "description": "Property Pro Lite is a platform where people can create and/or search properties for sale or rent.",
   "main": "index.js",
   "scripts": {
+    "dev" : "nodemon --exec babel-node ./server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,5 +20,16 @@
   "homepage": "https://github.com/ladaposamuel/PropertyPro-lite#readme",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/register": "^7.4.4",
+    "@babel/runtime": "^7.4.5",
+    "babel-loader": "^8.0.6",
+    "nodemon": "^1.19.1"
   }
 }
