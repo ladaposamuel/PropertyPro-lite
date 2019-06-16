@@ -89,7 +89,6 @@ header a:hover{
 }
 
 header li {
-  float: left;
   display: inline;
   padding: 0 20px 0 20px;
 }
@@ -109,13 +108,17 @@ header nav {
 }
 
 /* Showcase */
-
 #showcase-mini {
   min-height: 200px;
   background: url("../images/city.png") no-repeat 0;
   background-size: cover;
 }
 
+#showcase h1 {
+  float: left;
+  font-size: 80px;
+  width: 50%;
+}
 
 #showcase-mini h1 {
   text-align: center;
@@ -123,8 +126,109 @@ header nav {
 }
 
 
+#showcase .search-form {
+  float: right;
+  background-color: #ffffff;
+  padding: 22px;
+  box-shadow: #828282 0px 5px 10px -4px;
+  position: relative;
+  top: 100px;
+  margin-right: 5%;
+  width: 35%;
+  border-radius: 13px;
+}
+
+#showcase .search-form .option-field {
+  height: 40px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+#showcase .search-form .city-field {
+  width: 93%;
+  border-radius: 6px;
+  margin-bottom: 13px;
+}
+
+#showcase .search-form .search {
+  color: #fff;
+  background-color: #eb2365;
+  border-color: #e780a8;
+  width: 100%;
+}
 
 
+/* Advert Cards */
+
+.advert-card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  background-color: #efefef;
+  width: 20%;
+  display: inline-block;
+  margin-right: 45px;
+  margin-bottom: 30px;
+}
+.advert-card .map-icon {
+  width: 15px;
+}
+
+.advert-card .price {
+  position: relative;
+  top: -35px;
+  background: #ec2d6cc4;
+  padding: 4px;
+  color: #fff;
+}
+.advert-card img {
+  width: 100%;
+}
+
+.advert-card-body {
+  padding: 10px;
+}
+
+.advert-card-body .title {
+  font-size: 1.2rem;
+  margin-top: -37px;
+  margin-bottom: 7px;
+}
+
+.advert-card-footer .advert-card-btn {
+  width: 100%;
+  border-radius: unset;
+  background-color: #eb2365;
+  color: #fff;
+}
+
+/* Intro Texts */
+
+#intro-texts{
+  text-align: center;
+  margin-top: 40px;
+}
+
+#intro-texts .expore-texts {
+  width: 30%;
+  text-align: center;
+  display: inline-block;
+  border-right: 2px solid #eb2365;
+  margin-right: 16px;
+  padding-right: 25px;
+}
+
+#intro-texts .agents-texts {
+  width: 30%;
+  text-align: center;
+  display: inline-block;
+}
+
+/* About texts */
+  #about-texts p {
+    text-align: center;
+    font-size: 1.1rem;
+  }
+
+/* Sign up Form  */
 #signup-form .signup-box {
   height: 100%;
   display: flex;
@@ -132,6 +236,7 @@ header nav {
   justify-content: center;
 }
 
+/* Forms */
 .form {
   position: relative;
   z-index: 1;
@@ -185,4 +290,15 @@ header nav {
   display: inline-block;
   padding-right: 10px;
   white-space: nowrap;
+}
+
+footer {
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #eb2365;
+  text-align: center;
+  margin-top: 100px;
+  color: #fff;
 }
