@@ -4,7 +4,8 @@
   "description": "Property Pro Lite is a platform where people can create and/or search properties for sale or rent.",
   "main": "index.js",
   "scripts": {
-    "dev" : "nodemon --exec babel-node ./server/app.js",
+    "dev": "nodemon --exec babel-node ./server/app.js",
+    "pretest" : "eslint --ignore-path .gitignore .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -30,6 +31,9 @@
     "@babel/register": "^7.4.4",
     "@babel/runtime": "^7.4.5",
     "babel-loader": "^8.0.6",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.3",
     "nodemon": "^1.19.1"
   }
 }
