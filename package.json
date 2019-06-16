@@ -1,0 +1,23 @@
+{
+  "name": "PropertyPro-lite",
+  "version": "1.0.0",
+  "description": "Property Pro Lite is a platform where people can create and/or search properties for sale or rent.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ladaposamuel/PropertyPro-lite.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ladaposamuel/PropertyPro-lite/issues"
+  },
+  "homepage": "https://github.com/ladaposamuel/PropertyPro-lite#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
