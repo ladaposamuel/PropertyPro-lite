@@ -16,13 +16,14 @@
         <div id="logo">
             <h1>Property Pro Lite</h1>
         </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="post_ad.html">Post a Property</a></li>
-                <li><a href="signup.html">Create an account</a></li>
-                <li><a href="login.html">Login</a></li>
-            </ul>
+        <nav class="topnav" id="myTopnav">
+            <a href="index.html"class="active">Home</a>
+            <a href="post_ad.html">Post a Property</a>
+            <a href="signup.html">Create an Account</a>
+            <a href="login.html">Login</a>
+            <a href="javascript:void(0);" class="icon" onclick="mobileMenu()">
+              <i class="fa fa-bars"></i>
+            </a>
         </nav>
     </div>
 </header>
@@ -39,7 +40,12 @@
             <select name="" class="form-global option-field">
                 <option value="">Lagos</option>
             </select>
+            
+            <select name="" class="form-global option-field">
+                <option value="">2 Bedrooom</option>
+                <option value="">3 Bedrooom</option>
 
+            </select>
             <button class="button-global search">Search</button>
         </div>
     </div>
@@ -62,7 +68,7 @@
                 </div>
             </div>
             <div class="advert-card-footer">
-                <button class="button-global advert-card-btn">
+                <button class="button-global advert-card-btn"  onclick="viewProperty()">
                     View property
                 </button>
             </div>
@@ -79,7 +85,7 @@
                 </div>
             </div>
             <div class="advert-card-footer">
-                <button class="button-global advert-card-btn">
+                <button class="button-global advert-card-btn"  onclick="viewProperty()">
                     View property
                 </button>
             </div>
@@ -96,7 +102,7 @@
                 </div>
             </div>
             <div class="advert-card-footer">
-                <button class="button-global advert-card-btn">
+                <button class="button-global advert-card-btn"  onclick="viewProperty()">
                     View property
                 </button>
             </div>
@@ -113,7 +119,7 @@
                 </div>
             </div>
             <div class="advert-card-footer">
-                <button class="button-global advert-card-btn">
+                <button class="button-global advert-card-btn"  onclick="viewProperty()">
                     View property
                 </button>
             </div>
@@ -138,12 +144,12 @@
         </div>
         <div class="agents-texts">
             <h2>I want to post properties adverts</h2>
-            <a href="#." class="button-global btn-primary">Become an Agent</a>
+            <a href="agent_ads.html" class="button-global btn-primary">Become an Agent</a>
         </div>
     </div>
 </section>
 
-
+<script src="./js/main.js"></script>
 <footer>
     <p> &copy PropertyPro-lite - 2019</p>
 </footer>

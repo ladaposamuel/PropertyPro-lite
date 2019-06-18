@@ -13,15 +13,15 @@
         <div id="logo">
             <h1>Property Pro Lite</h1>
         </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="post_ad.html">Post a property</a></li>
-                <li><a href="agent_ads.html">Manage Properties</a></li>
-                <li><a href="index.html">Logout</a></li>
-
-            </ul>
-        </nav>
+        <nav class="topnav" id="myTopnav">
+            <a href="index.html" >Home</a>
+            <a href="post_ad.html">Post a Property</a>
+            <a href="agent_ads.html">Manage Properties</a>
+            <a href="index.html">Logout</a>
+            <a href="javascript:void(0);" class="icon" onclick="mobileMenu()">
+              <i class="fa fa-bars"></i>
+            </a>
+          </nav>
     </div>
 </header>
 
@@ -77,7 +77,7 @@
                     <td>94</td>
                     <td>
 
-                        <a href="#." class="button-global btn-link btn-primary">View</a>
+                        <a href="edit_ad.html" class="button-global btn-link btn-primary">View</a>
                         <a href="#." class="button-global  btn-link btn-success">Mark as Sold</a>
                         <a href="#." class="button-global  btn-link btn-primary">Delete</a>
                     </td>
@@ -89,7 +89,7 @@
     </div>
 
 </section>
-
+<script src="./js/main.js"></script>
 
 </body>
 </html>

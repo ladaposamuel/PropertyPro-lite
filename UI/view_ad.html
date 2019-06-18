@@ -11,69 +11,78 @@
 
 <body>
 
-<header class="shadow">
-    <div class="container">
-        <div id="logo">
-            <h1>Property Pro Lite</h1>
+    <header class="shadow">
+        <div class="container">
+            <div id="logo">
+                <h1>Property Pro Lite</h1>
+            </div>
+            <nav class="topnav" id="myTopnav">
+                <a href="index.html" class="active">Home</a>
+                <a href="post_ad.html">Post a Property</a>
+                <a href="signup.html">Create an Account</a>
+                <a href="login.html">Login</a>
+                <a href="javascript:void(0);" class="icon" onclick="mobileMenu()">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </nav>
         </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="post_ad.html">Post a Property</a></li>
-                <li><a href="signup.html">Create an account</a></li>
-                <li><a href="login.html">Login</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
+    </header>
 
-<section id="showcase-mini">
-    <div class="container">
-        <div class=" sort-form">
-            <select name="" class="form-global option-field">
-                <option value="">For Rent</option>
-            </select>
+    <section id="showcase-mini">
+        <div class="container">
+            <div class=" sort-form">
+                <select name="" class="form-global option-field">
+                    <option value="">For Rent</option>
+                </select>
 
-            <select name="" class="form-global option-field">
-                <option value="">Lagos</option>
-                <option value="">Ibadan</option>
-            </select>
-            <button class="button-global sort">Search</button>
+                <select name="" class="form-global option-field">
+                    <option value="">Lagos</option>
+                    <option value="">Ibadan</option>
+                </select>
 
-        </div>
-
-    </div>
-</section>
+                <select name="" class="form-global option-field">
+                    <option value="">2 Bedroom</option>
+                    <option value="">4 Bedroom</option>
+                </select>
 
 
-<section id="property" class="mt-40">
-    <div class="container">
-        <h1 class="title ">
-            Viewing Property
-        </h1>
-        <a href="lists.html"><span>Go Back to Listings</span></a>
-        <div class="single-advert-card">
-            <img src="./images/house.jpg" alt="" class="single-advert-img">
 
-            <hr>
-            <div class="single-advert-body">
-                <ul>
-                    <li><b>Owner: </b>Hello</li>
-                    <li><b>City:</b> Ibadan</li>
-                    <li><b>Address:</b> Ibadan</li>
-                    <li><b>Owner Phone:</b> 09929929992</li>
+                <button class="button-global sort">Search</button>
 
-                </ul>
             </div>
 
-            <button class="button-global mt-40">Send Email to Owner</button>
         </div>
-    </div>
-</section>
+    </section>
 
-<footer>
-    <p> &copy PropertyPro-lite - 2019</p>
-</footer>
+
+    <section id="property" class="mt-40">
+        <div class="container">
+            <h1 class="title ">
+                Viewing Property
+            </h1>
+            <a href="lists.html"><span>Go Back to Listings</span></a>
+            <div class="single-advert-card">
+                <img src="./images/house.jpg" alt="" class="single-advert-img">
+
+                <hr>
+                <div class="single-advert-body">
+                    <ul>
+                        <li><b>Owner: </b>Hello</li>
+                        <li><b>City:</b> Ibadan</li>
+                        <li><b>Address:</b> Ibadan</li>
+                        <li><b>Owner Phone:</b> 09929929992</li>
+
+                    </ul>
+                </div>
+
+                <button class="button-global mt-40">Send Email to Owner</button>
+            </div>
+        </div>
+    </section>
+    <script src="./js/main.js"></script>
+    <footer>
+        <p> &copy PropertyPro-lite - 2019</p>
+    </footer>
 </body>
 
 </html>
