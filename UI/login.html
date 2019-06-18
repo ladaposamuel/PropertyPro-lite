@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,19 +8,21 @@
   <link rel="stylesheet" href="./styles/style.css">
   <title>Property Pro Lite</title>
 </head>
+
 <body>
   <header>
     <div class="container">
       <div id="logo">
         <h1>Property Pro Lite</h1>
       </div>
-      <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="login.html">Post a Property</a></li>
-          <li><a href="signup.html">Create an account</a></li>
-          <li><a href="login.html">Login</a></li>
-        </ul>
+      <nav class="topnav" id="myTopnav">
+        <a href="index.html" >Home</a>
+        <a href="post_ad.html">Post a Property</a>
+        <a href="signup.html">Create an Account</a>
+        <a href="login.html" class="active">Login</a>
+        <a href="javascript:void(0);" class="icon" onclick="mobileMenu()">
+          <i class="fa fa-bars"></i>
+        </a>
       </nav>
     </div>
   </header>
@@ -37,11 +39,17 @@
         <form action="" class="forms">
           <input type="email" placeholder="Email">
           <input type="password" placeholder="Password">
-       
+
           <button class="button-global">Submit</button>
         </form>
+        <hr>
+        <a href="signup.html" class="btn-link">- Create a new Account</a>
+        <br>
+        <a href="reset_password.html" class="btn-link">- Reset Password</a>
       </div>
     </div>
   </section>
+  <script src="./js/main.js"></script>
 </body>
+
 </html>
