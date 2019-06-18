@@ -1,7 +1,6 @@
 import { validationResult } from 'express-validator/check';
 import UserModel from '../models/User';
 
-
 const User = {
   /**
    *
@@ -18,7 +17,13 @@ const User = {
       });
     }
     const user = UserModel.create(req.body);
-    return res.status(201).send(user);
+
+    const data = {
+      status: 'success',
+      user,
+    };
+
+    return res.status(201).send(data);
   },
 };
 

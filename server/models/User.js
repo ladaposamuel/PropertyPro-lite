@@ -1,6 +1,4 @@
 import moment from 'moment';
-import uuid from 'uuid';
-
 
 class User {
   /**
@@ -17,11 +15,12 @@ class User {
    */
   create(data) {
     const newUser = {
-      id: uuid.v4(),
-      firstName: data.firstName || '',
-      lastName: data.lastName || '',
+      id: this.user.length + 1,
+      token: '',
+      first_name: data.firstName || '',
+      last_name: data.lastName || '',
       email: data.email || '',
-      phone: data.phone || '',
+      phoneNumber: data.phone || '',
       address: data.address || '',
       password: data.password || '',
       isAgent: data.isAgent || '',
