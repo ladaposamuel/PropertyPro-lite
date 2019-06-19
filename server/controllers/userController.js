@@ -16,13 +16,22 @@ const User = {
         error: errors.array()[0].msg,
       });
     }
+    const allUsers = UserModel.fetchAll();
+    allUsers.forEach((data) => {
+      let resp = false;
+      if (req.body.email === data.email) {
+        resp = res.status(422).json({
+          status: 'error',
+          error: 'Email already exist',
+        });
+      }
+      return resp;
+    });
     const data = UserModel.create(req.body);
-
     const user = {
       status: 'success',
       data,
     };
-
     return res.status(201).send(user);
   },
 };
