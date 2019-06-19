@@ -6,7 +6,12 @@
   "scripts": {
     "dev": "nodemon --exec babel-node ./server/app.js",
     "pretest": "eslint --ignore-path .gitignore .",
-    "test": "mocha --require @babel/register ./server/test --exit"
+    "test": "mocha --require @babel/register ./server/test --exit",
+    "build": "rm -rf ./build && babel -d ./build ./server -s",
+    "generate-lcov": "nyc report --reporter=text-lcov > lcov.info",
+    "coveralls-coverage": "coveralls < lcov.info",
+    "codeclimate-coverage": "codeclimate-test-reporter < lcov.info",
+    "coverage": "nyc npm test && npm run generate-lcov && npm run coveralls-coverage && npm run codeclimate-coverage"
   },
   "repository": {
     "type": "git",
@@ -20,11 +25,11 @@
   },
   "homepage": "https://github.com/ladaposamuel/PropertyPro-lite#readme",
   "dependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "express": "^4.17.1",
     "express-validator": "^5.3.1",
-    "moment": "^2.24.0",
-    "chai": "^4.2.0",
-    "chai-http": "^4.3.0"
+    "moment": "^2.24.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
@@ -36,6 +41,8 @@
     "@babel/runtime": "^7.4.5",
     "babel-loader": "^8.0.6",
     "eslint": "^5.16.0",
+    "codeclimate-test-reporter": "^0.5.1",
+    "coveralls": "^3.0.4",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.17.3",
     "mocha": "^6.1.4",
