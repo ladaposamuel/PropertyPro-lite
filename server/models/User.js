@@ -15,18 +15,6 @@ class User {
    */
 
   fetchAll() {
-    // const defaultUser = {
-    //   firstName: 'Sam',
-    //   lastName: 'Samuel',
-    //   email: 'sam@mail.io',
-    //   phone: '08068170006',
-    //   address: 'Heaven Land street',
-    //   password: '1',
-    //   isAgent: 'false',
-    //   createdDate: moment.now(),
-    //   modifiedDate: moment.now(),
-    // };
-    // this.user.push(defaultUser);
     return this.user;
   }
 
@@ -35,13 +23,14 @@ class User {
     const newUser = {
       id: allUsers.length + 1,
       token: '',
-      first_name: data.firstName || '',
-      last_name: data.lastName || '',
-      email: data.email || '',
+      first_name: data.firstName,
+      last_name: data.lastName,
+      email: data.email,
       phoneNumber: data.phone || '',
+      is_admin: data.isAdmin || false,
       address: data.address || '',
       password: data.password || '',
-      isAgent: data.isAgent || '',
+      isAgent: data.isAgent || false,
       createdDate: moment.now(),
       modifiedDate: moment.now(),
     };

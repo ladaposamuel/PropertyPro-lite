@@ -161,6 +161,55 @@ describe('Test User Sign up', () => {
         done();
       });
   });
+
+  it('should ensure no duplicate email', (done) => {
+    const user = {
+      firstName: 'Sam',
+      lastName: 'Samuel',
+      email: 'james@mail.io',
+      phone: '08068170006',
+      address: 'Heaven Land street',
+      password: 'sam33333',
+      isAgent: 'false',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('error');
+        expect(res.body.error);
+        done();
+      });
+  });
+  it('should ensure no duplicate phone number', (done) => {
+    const user = {
+      firstName: 'Sam',
+      lastName: 'Samuel',
+      email: 'james@mail.io',
+      phone: '08068170006',
+      address: 'Heaven Land street',
+      password: 'sam33333',
+      isAgent: 'false',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('error');
+        expect(res.body.error);
+        done();
+      });
+  });
   it('should post the user data and return the user object, with a correct payload', (done) => {
     const user = {
       firstName: 'Sam',

@@ -1,4 +1,5 @@
 import { body } from 'express-validator/check';
+import UserModel from '../models/User';
 
 const signUpValidation = [
   body('email')
@@ -6,6 +7,28 @@ const signUpValidation = [
     .withMessage('A valid email is required')
     .normalizeEmail()
     .trim(),
+  body('email').custom((value) => {
+    const defaultValue = {
+      id: 12,
+      firstName: 'Sam',
+      lastName: 'Samuel',
+      email: 'james@mail.io',
+      phone: '08068170006',
+      address: 'Heaven Land street',
+      password: 'sam1111997',
+      isAgent: 'false',
+    };
+    const allUsers = UserModel.fetchAll();
+    allUsers.push(defaultValue);
+    allUsers.forEach((data) => {
+      if (value === data.email) {
+        throw new Error('Email already in use');
+      } else {
+        return true;
+      }
+    });
+    return true;
+  }),
   body(
     'password',
     'Please enter a password with only text and numbers and at least 6 characters long',
