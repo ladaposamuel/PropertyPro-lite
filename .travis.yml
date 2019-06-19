@@ -1,7 +1,12 @@
-language: node_js
+ language: node_js
 
  node_js:
   - "stable"
+  
+env:
+  global:
+    - CC_TEST_REPORTER_ID=df07dbb6e03e1a1bb89fb7af05545d52bfb2f911e8dc595605a7135c6d1c0262
+
 
  install:
   - npm install
