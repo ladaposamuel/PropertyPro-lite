@@ -13,9 +13,27 @@ class User {
    *
    * @returns {object} user object
    */
+
+  fetchAll() {
+    // const defaultUser = {
+    //   firstName: 'Sam',
+    //   lastName: 'Samuel',
+    //   email: 'sam@mail.io',
+    //   phone: '08068170006',
+    //   address: 'Heaven Land street',
+    //   password: '1',
+    //   isAgent: 'false',
+    //   createdDate: moment.now(),
+    //   modifiedDate: moment.now(),
+    // };
+    // this.user.push(defaultUser);
+    return this.user;
+  }
+
   create(data) {
+    const allUsers = this.fetchAll();
     const newUser = {
-      id: this.user.length + 1,
+      id: allUsers.length + 1,
       token: '',
       first_name: data.firstName || '',
       last_name: data.lastName || '',
