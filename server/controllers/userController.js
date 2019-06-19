@@ -16,14 +16,14 @@ const User = {
         error: errors.array()[0].msg,
       });
     }
-    const user = UserModel.create(req.body);
+    const data = UserModel.create(req.body);
 
-    const data = {
+    const user = {
       status: 'success',
-      user,
+      data,
     };
 
-    return res.status(201).send(data);
+    return res.status(201).send(user);
   },
 };
 
