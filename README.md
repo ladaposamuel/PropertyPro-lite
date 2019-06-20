@@ -19,6 +19,5 @@ Property Pro Lite is a platform where people can create and/or search properties
 
  ## Project Status
 
-[![Build Status](https://travis-ci.org/ladaposamuel/PropertyPro-lite.svg?branch=develop)](https://travis-ci.org/ladaposamuel/PropertyPro-lite)
+[![Build Status](https://travis-ci.org/ladaposamuel/PropertyPro-lite.svg?branch=develop)](https://travis-ci.org/ladaposamuel/PropertyPro-lite) [![Coverage Status](https://coveralls.io/repos/github/ladaposamuel/PropertyPro-lite/badge.svg?branch=develop)](https://coveralls.io/github/ladaposamuel/PropertyPro-lite?branch=develop) [![Maintainability](https://api.codeclimate.com/v1/badges/b17e8288b44d2a31ae7b/maintainability)](https://codeclimate.com/github/ladaposamuel/PropertyPro-lite/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/b17e8288b44d2a31ae7b/test_coverage)](https://codeclimate.com/github/ladaposamuel/PropertyPro-lite/test_coverage)
 
-[![Coverage Status](https://coveralls.io/repos/github/ladaposamuel/PropertyPro-lite/badge.svg?branch=develop)](https://coveralls.io/github/ladaposamuel/PropertyPro-lite?branch=develop)
