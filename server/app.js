@@ -20,7 +20,7 @@ const swaggerDefinition = {
 };
 const options = {
   swaggerDefinition,
-  apis: [path.resolve(__dirname, '/routes/*.js')],
+  apis: ['./server/routes/*.js'],
 };
 const swaggerSpec = swaggerJSDoc(options);
 
@@ -29,6 +29,10 @@ const swaggerSpec = swaggerJSDoc(options);
 app.get('/swagger.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.send(swaggerSpec);
+});
+
+app.get('/docs', (req, res) => {
+  res.sendFile(path.join(__dirname, 'redoc.html'));
 });
 
 app.get('/', (req, res) => {
