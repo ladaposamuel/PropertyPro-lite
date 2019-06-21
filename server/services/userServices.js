@@ -10,8 +10,8 @@ class userServices {
   fetchUsers() {
     const user = {
       id: 1,
-      first_ame: 'oooo',
-      last_ame: 'Samuel',
+      first_name: 'oooo',
+      last_name: 'Samuel',
       email: 'sam@mail.io',
       phoneNumber: '08068170006',
       address: 'Heaven Land street',

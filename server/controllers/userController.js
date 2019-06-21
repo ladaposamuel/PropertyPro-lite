@@ -9,7 +9,7 @@ const UserController = {
     } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(422).json({
+      return res.status(400).json({
         status: 'error',
         error: errors.array()[0].msg,
       });
@@ -36,29 +36,26 @@ const UserController = {
     };
     return res.status(201).send(user);
   },
-  login(res, req) {
-    console.log('TCL: login -> res', res.body);
+  login(req, res) {
     const { email, password } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(422).json({
+      return res.status(400).json({
         status: 'error',
         error: errors.array()[0].msg,
       });
     }
     const user = userService.loginUser(req.body);
+    user.token = uuid.v4();
     if (email !== 'sam@mail.io' || password !== 'sam1111997') {
-      return res.send({
-        status: 400,
+      return res.status(400).send({
+        status: 'error',
         error: 'Invalid email or password',
       });
     }
     return res.send({
-      status: 200,
-      data: {
-        token: uuid.v4(),
-        user,
-      },
+      status: 'success',
+      data: user,
     });
   },
 };
