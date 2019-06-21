@@ -1,6 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../app';
+import { User } from '../models/User';
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -16,15 +17,15 @@ describe('Test User Sign up', () => {
       });
   });
   it('should validate user email', (done) => {
-    const user = {
+    const user = new User({
       firstName: 'Sam',
       lastName: 'Samuel',
-      email: 'sam@ail',
+      email: 'sam@mail',
       phone: '08068170026',
       address: 'Heaven Land street',
       password: 'sam1111997',
       isAgent: 'false',
-    };
+    });
     chai
       .request(server)
       .post('/api/v1/auth/signup')
@@ -40,7 +41,7 @@ describe('Test User Sign up', () => {
       });
   });
   it('should ensure user enters acceptable password', (done) => {
-    const user = {
+    const user = new User({
       firstName: 'Sam',
       lastName: 'Samuel',
       email: 'sam@mail.io',
@@ -48,7 +49,7 @@ describe('Test User Sign up', () => {
       address: 'Heaven Land street',
       password: '1',
       isAgent: 'false',
-    };
+    });
     chai
       .request(server)
       .post('/api/v1/auth/signup')
@@ -67,12 +68,12 @@ describe('Test User Sign up', () => {
   });
   it('should ensure user enters a correct phone number', (done) => {
     const user = {
-      firstName: 'Sam',
+      firstName: 'oooo',
       lastName: 'Samuel',
-      email: 'sam@mail.io',
-      phone: '080681726',
+      email: 'sam@ail.io',
+      phoneNumber: '333',
       address: 'Heaven Land street',
-      password: 'sam33333',
+      password: 'sam1111997',
       isAgent: 'false',
     };
     chai
@@ -90,15 +91,15 @@ describe('Test User Sign up', () => {
       });
   });
   it('should return error when characters different from text and numbers are passed in password', (done) => {
-    const user = {
+    const user = new User({
       firstName: 'Sam',
       lastName: 'Samuel',
       email: 'sam@mail.io',
-      phone: '08068170006',
+      phone: '000',
       address: 'Heaven Land street',
       password: '1',
       isAgent: 'false',
-    };
+    });
     chai
       .request(server)
       .post('/api/v1/auth/signup')
@@ -116,14 +117,14 @@ describe('Test User Sign up', () => {
       });
   });
   it('should return error if lastName is not present ', (done) => {
-    const user = {
+    const user = new User({
       firstName: 'Sam',
       email: 'sam@mail.io',
-      phone: '08068170006',
+      phone: '000',
       address: 'Heaven Land street',
-      password: '1',
+      password: 'sam1111997',
       isAgent: 'false',
-    };
+    });
     chai
       .request(server)
       .post('/api/v1/auth/signup')
@@ -139,14 +140,14 @@ describe('Test User Sign up', () => {
       });
   });
   it('should return error if firstName is not present ', (done) => {
-    const user = {
+    const user = new User({
       lastName: 'Samuel',
       email: 'sam@mail.io',
-      phone: '08068170006',
+      phone: '000',
       address: 'Heaven Land street',
-      password: '1',
+      password: 'sam1111997',
       isAgent: 'false',
-    };
+    });
     chai
       .request(server)
       .post('/api/v1/auth/signup')
@@ -163,15 +164,15 @@ describe('Test User Sign up', () => {
   });
 
   it('should ensure no duplicate email', (done) => {
-    const user = {
+    const user = new User({
       firstName: 'Sam',
       lastName: 'Samuel',
-      email: 'james@mail.io',
-      phone: '08068170006',
+      email: 'sam@mail.io',
+      phone: '000',
       address: 'Heaven Land street',
-      password: 'sam33333',
+      password: 'sam1111997',
       isAgent: 'false',
-    };
+    });
     chai
       .request(server)
       .post('/api/v1/auth/signup')
@@ -187,15 +188,15 @@ describe('Test User Sign up', () => {
       });
   });
   it('should ensure no duplicate phone number', (done) => {
-    const user = {
+    const user = new User({
       firstName: 'Sam',
       lastName: 'Samuel',
-      email: 'james@mail.io',
-      phone: '08068170006',
+      email: 'sam@mail.io',
+      phone: '000',
       address: 'Heaven Land street',
-      password: 'sam33333',
+      password: 'sam1111997',
       isAgent: 'false',
-    };
+    });
     chai
       .request(server)
       .post('/api/v1/auth/signup')
@@ -212,12 +213,12 @@ describe('Test User Sign up', () => {
   });
   it('should post the user data and return the user object, with a correct payload', (done) => {
     const user = {
-      firstName: 'Sam',
+      firstName: 'oooo',
       lastName: 'Samuel',
-      email: 'sam@mail.io',
-      phone: '08068170006',
+      email: 'sam@ail.io',
+      phoneNumber: '08068170006',
       address: 'Heaven Land street',
-      password: 'sam22222',
+      password: 'sam1111997',
       isAgent: 'false',
     };
     chai
