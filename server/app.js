@@ -41,5 +41,5 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/auth', authRoutes);
 app.listen(3000);
-console.log('app running on port ', 3000);
+// console.log('app running on port ', 3000);
 module.exports = app;

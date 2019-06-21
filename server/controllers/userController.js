@@ -1,3 +1,4 @@
+import uuid from 'uuid';
 import { validationResult } from 'express-validator/check';
 import { User, userService } from '../models/User';
 
@@ -22,6 +23,7 @@ const UserController = {
     const allUsers = userService.fetchUsers();
     const newUser = new User({
       id: allUsers.length + 1,
+      token: uuid.v4(),
       firstName,
       lastName,
       email,

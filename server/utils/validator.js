@@ -20,7 +20,7 @@ const signUpValidation = [
     .isLength({ min: 2 })
     .isAlphanumeric()
     .trim(),
-  body('phone', 'Please enter a correct 11 digit phone number')
+  body('phoneNumber', 'Please enter a correct 11 digit phone number')
     .isLength({ min: 11, max: 11 })
     .isNumeric()
     .trim(),
