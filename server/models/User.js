@@ -1,42 +1,34 @@
-import moment from 'moment';
+import UserServices from '../services/userServices';
 
+const userService = new UserServices();
 class User {
-  /**
-   * class constructor
-   * @param {object} data
-   */
-  constructor() {
-    this.user = [];
-  }
-
-  /**
-   *
-   * @returns {object} user object
-   */
-
-  fetchAll() {
-    return this.user;
-  }
-
-  create(data) {
-    const allUsers = this.fetchAll();
-    const newUser = {
-      id: allUsers.length + 1,
-      token: '',
-      first_name: data.firstName,
-      last_name: data.lastName,
-      email: data.email,
-      phoneNumber: data.phone || '',
-      is_admin: data.isAdmin || false,
-      address: data.address || '',
-      password: data.password || '',
-      isAgent: data.isAgent || false,
-      createdDate: moment.now(),
-      modifiedDate: moment.now(),
-    };
-    this.user.push(newUser);
-    return newUser;
+  constructor({
+    id,
+    token,
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+    isAdmin,
+    address,
+    password,
+    isAgent,
+    createdDate,
+    modifiedDate,
+  }) {
+    this.id = id;
+    this.token = token;
+    this.first_name = firstName;
+    this.last_name = lastName;
+    this.email = email;
+    this.phoneNumber = phoneNumber;
+    this.is_admin = isAdmin || false;
+    this.address = address;
+    this.password = password;
+    this.isAgent = isAgent || false;
+    this.createdDate = createdDate;
+    this.modifiedDate = modifiedDate;
   }
 }
 
-export default new User();
+export { User, userService };
