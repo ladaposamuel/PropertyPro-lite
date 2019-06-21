@@ -31,7 +31,7 @@ describe('Test User Sign up', () => {
       .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
-        expect(res.status).to.eql(422);
+        expect(res.status).to.eql(400);
         expect(res.body)
           .to.have.property('status')
           .to.eql('error');
@@ -55,7 +55,7 @@ describe('Test User Sign up', () => {
       .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
-        expect(res.status).to.eql(422);
+        expect(res.status).to.eql(400);
         expect(res.body)
           .to.have.property('status')
           .to.eql('error');
@@ -81,7 +81,7 @@ describe('Test User Sign up', () => {
       .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
-        expect(res.status).to.eql(422);
+        expect(res.status).to.eql(400);
         expect(res.body)
           .to.have.property('status')
           .to.eql('error');
@@ -105,7 +105,7 @@ describe('Test User Sign up', () => {
       .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
-        expect(res.status).to.eql(422);
+        expect(res.status).to.eql(400);
         expect(res.body)
           .to.have.property('status')
           .to.eql('error');
@@ -130,7 +130,7 @@ describe('Test User Sign up', () => {
       .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
-        expect(res.status).to.eql(422);
+        expect(res.status).to.eql(400);
         expect(res.body).to.have.property('error');
         expect(res.body)
           .to.have.property('status')
@@ -153,7 +153,7 @@ describe('Test User Sign up', () => {
       .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
-        expect(res.status).to.eql(422);
+        expect(res.status).to.eql(400);
         expect(res.body).to.have.property('error');
         expect(res.body)
           .to.have.property('status')
@@ -178,7 +178,7 @@ describe('Test User Sign up', () => {
       .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
-        expect(res.status).to.eql(422);
+        expect(res.status).to.eql(400);
         expect(res.body).to.have.property('error');
         expect(res.body)
           .to.have.property('status')
@@ -202,7 +202,7 @@ describe('Test User Sign up', () => {
       .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
-        expect(res.status).to.eql(422);
+        expect(res.status).to.eql(400);
         expect(res.body).to.have.property('error');
         expect(res.body)
           .to.have.property('status')
@@ -235,6 +235,76 @@ describe('Test User Sign up', () => {
         expect(res.body.data).to.have.property('first_name');
         expect(res.body.data).to.have.property('last_name');
         expect(res.body.data).to.have.property('email');
+        done();
+      });
+  });
+});
+
+describe('Test User Sign in Route', () => {
+  it('should validate user email', (done) => {
+    const user = new User({
+      email: 'sam@mail',
+      password: 'sam1111997',
+    });
+    chai
+      .request(server)
+      .post('/api/v1/auth/signin')
+      .send(user)
+      .end((err, res) => {
+        expect(res.status).to.eql(400);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('error');
+        expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('A valid email is required');
+        done();
+      });
+  });
+  it('should ensure user enters acceptable password', (done) => {
+    const user = new User({
+      email: 'sam@mail.io',
+      password: '1',
+    });
+    chai
+      .request(server)
+      .post('/api/v1/auth/signin')
+      .send(user)
+      .end((err, res) => {
+        expect(res.status).to.eql(400);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('error');
+        expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql(
+          'Please enter a password with only text and numbers and at least 6 characters long',
+        );
+        done();
+      });
+  });
+  it('should return success and token when correct details are passed along', (done) => {
+    const user = new User({
+      email: 'sam@mail.io',
+      password: 'sam1111997',
+    });
+    chai
+      .request(server)
+      .post('/api/v1/auth/signin')
+      .send(user)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.data).to.have.property('token');
+        done();
+      });
+  });
+  it('should return error if wrong email or password is passed along', (done) => {
+    const user = { email: 'james@mail.com', password: 'police' };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signin')
+      .send(user)
+      .end((err, res) => {
+        expect(res.status).to.eql(400);
+        expect(res.body).to.have.property('error');
         done();
       });
   });

@@ -33,6 +33,22 @@ const signUpValidation = [
     .trim(),
 ];
 
+const signInValidation = [
+  body('email')
+    .isEmail()
+    .withMessage('A valid email is required')
+    .normalizeEmail()
+    .trim(),
+  body(
+    'password',
+    'Please enter a password with only text and numbers and at least 6 characters long',
+  )
+    .trim()
+    .isLength({ min: 6 })
+    .isAlphanumeric(),
+];
+
 module.exports = {
   signUpValidation,
+  signInValidation,
 };

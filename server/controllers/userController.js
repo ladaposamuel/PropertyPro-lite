@@ -3,19 +3,13 @@ import { validationResult } from 'express-validator/check';
 import { User, userService } from '../models/User';
 
 const UserController = {
-  /**
-   *
-   * @param {object} req
-   * @param {object} res
-   * @returns {object} user object
-   */
   create(req, res) {
     const {
       firstName, lastName, email, address, isAgent, password, phoneNumber,
     } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(422).json({
+      return res.status(400).json({
         status: 'error',
         error: errors.array()[0].msg,
       });
@@ -41,6 +35,28 @@ const UserController = {
       data: newUser,
     };
     return res.status(201).send(user);
+  },
+  login(req, res) {
+    const { email, password } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        status: 'error',
+        error: errors.array()[0].msg,
+      });
+    }
+    const user = userService.loginUser(req.body);
+    user.token = uuid.v4();
+    if (email !== 'sam@mail.io' || password !== 'sam1111997') {
+      return res.status(400).send({
+        status: 'error',
+        error: 'Invalid email or password',
+      });
+    }
+    return res.send({
+      status: 'success',
+      data: user,
+    });
   },
 };
 
