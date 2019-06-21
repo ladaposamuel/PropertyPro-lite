@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import userRoutes from './routes/userRoutes';
+import authRoutes from './routes/authRoutes';
 
 const swaggerJSDoc = require('swagger-jsdoc');
 
@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
   res.redirect('/docs');
 });
 
-app.use('/api/v1/auth', userRoutes);
+app.use('/api/v1/auth', authRoutes);
 app.listen(3000);
-// console.log('app running on port ', 3000);
+console.log('app running on port ', 3000);
 module.exports = app;
