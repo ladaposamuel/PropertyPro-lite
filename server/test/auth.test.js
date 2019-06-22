@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../app';
-import { User } from '../models/User';
+import { User, userService } from '../models/User';
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -282,6 +282,17 @@ describe('Test User Sign in Route', () => {
       });
   });
   it('should return success and token when correct details are passed along', (done) => {
+    const dummyUser = new User({
+      id: 5,
+      firstName: 'Sam',
+      lastName: 'Samuel',
+      email: 'sam@mail.io',
+      phone: 'sam@8888',
+      address: 'Heaven Land street',
+      password: 'sam1111997',
+      isAgent: true,
+    });
+    userService.createUser(dummyUser);
     const user = new User({
       email: 'sam@mail.io',
       password: 'sam1111997',
@@ -297,6 +308,17 @@ describe('Test User Sign in Route', () => {
       });
   });
   it('should return error if wrong email or password is passed along', (done) => {
+    const dummyUser = new User({
+      id: 5,
+      firstName: 'Sam',
+      lastName: 'Samuel',
+      email: 'sam@mail.io',
+      phone: 'sam@8888',
+      address: 'Heaven Land street',
+      password: 'sam1111997',
+      isAgent: true,
+    });
+    userService.createUser(dummyUser);
     const user = { email: 'james@mail.com', password: 'police' };
     chai
       .request(server)
