@@ -8,18 +8,11 @@ class userServices {
   }
 
   fetchUsers() {
-    const user = {
-      id: 1,
-      first_name: 'oooo',
-      last_name: 'Samuel',
-      email: 'sam@mail.io',
-      phoneNumber: '08068170006',
-      address: 'Heaven Land street',
-      password: 'sam1111997',
-      isAgent: 'false',
-    };
-    this.users.push(user);
     return this.users;
+  }
+
+  fetchUserById(id) {
+    return this.users.find(user => user.id === id);
   }
 
   loginUser() {
