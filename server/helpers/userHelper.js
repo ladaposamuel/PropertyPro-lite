@@ -3,7 +3,7 @@ import { userService } from '../models/User';
 class userHelper {
   static checkifAgent(owner) {
     const userData = userService.fetchUserById(owner);
-    if (userData.isAgent) {
+    if (userData && userData.isAgent) {
       return true;
     }
     return false;

@@ -58,7 +58,7 @@ const propertyValidation = [
   body('city', 'Please enter the city where property is located')
     .trim()
     .isString(),
-  body('state', 'Please enter the address where property is located')
+  body('address', 'Please enter the address where property is located')
     .trim()
     .isString(),
   body('type', 'Please enter the type of the property')

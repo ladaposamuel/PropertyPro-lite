@@ -12,7 +12,10 @@ class userServices {
   }
 
   fetchUserById(id) {
-    return this.users.find(user => user.id === id);
+    function isUserId(user) {
+      return user.id === id;
+    }
+    return this.users.find(isUserId);
   }
 
   loginUser() {
