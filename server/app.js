@@ -1,21 +1,24 @@
 import express from 'express';
 import path from 'path';
+import bodyParser from 'body-parser';
 import authRoutes from './routes/authRoutes';
 import propertyRoutes from './routes/propertyRoutes';
-
 
 const swaggerJSDoc = require('swagger-jsdoc');
 
 const app = express();
 
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // -- setup up swagger-jsdoc --
 const swaggerDefinition = {
   info: {
     title: 'PropertyPro-Lite',
     version: '1.0.0',
-    description: 'Property Pro Lite is a platform where people can create and/or search properties for sale or rent.',
+    description:
+      'Property Pro Lite is a platform where people can create and/or search properties for sale or rent.',
   },
   host: 'localhost:3000',
   basePath: '/',

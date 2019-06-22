@@ -3,6 +3,10 @@ class propertyServices {
     this.properties = [];
   }
 
+  createProperty(property) {
+    this.properties.push(property);
+  }
+
   fetchAll() {
     return this.properties;
   }

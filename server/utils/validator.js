@@ -47,8 +47,27 @@ const signInValidation = [
     .isLength({ min: 6 })
     .isAlphanumeric(),
 ];
+const propertyValidation = [
+  body('price')
+    .isFloat()
+    .withMessage('A valid price/amount is required')
+    .trim(),
+  body('state', 'Please enter the state where property is located')
+    .trim()
+    .isString(),
+  body('city', 'Please enter the city where property is located')
+    .trim()
+    .isString(),
+  body('address', 'Please enter the address where property is located')
+    .trim()
+    .isString(),
+  body('type', 'Please enter the type of the property')
+    .trim()
+    .isString(),
+];
 
 module.exports = {
   signUpValidation,
   signInValidation,
+  propertyValidation,
 };
