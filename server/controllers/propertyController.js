@@ -4,6 +4,20 @@ import userHelper from '../helpers/userHelper';
 import { uploader } from '../config/cloudinaryConfig';
 
 const PropertyController = {
+  viewProperty(req, res) {
+    const { id } = req.params;
+    const fetchById = propertyService.fetchById(parseInt(id));
+    if (!fetchById) {
+      return res.status(400).send({
+        status: 'error',
+        error: 'Property not found!',
+      });
+    }
+    return res.send({
+      status: 1,
+      data: fetchById,
+    });
+  },
   viewPropertyAll(req, res) {
     const data = propertyService.fetchAll();
 
