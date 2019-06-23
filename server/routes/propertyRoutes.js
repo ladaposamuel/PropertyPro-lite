@@ -6,6 +6,7 @@ import { cloudinaryConfig } from '../config/cloudinaryConfig';
 const router = express.Router();
 
 router.get('/property/', PropertyController.viewPropertyAll);
+router.get('/property/:id', PropertyController.viewProperty);
 
 router.post(
   '/property/',
