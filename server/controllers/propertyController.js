@@ -6,7 +6,7 @@ import { uploader } from '../config/cloudinaryConfig';
 const PropertyController = {
   viewProperty(req, res) {
     const { id } = req.params;
-    const fetchById = propertyService.fetchById(parseInt(id));
+    const fetchById = propertyService.fetchById(parseInt(id, 10));
     if (!fetchById) {
       return res.status(400).send({
         status: 'error',
