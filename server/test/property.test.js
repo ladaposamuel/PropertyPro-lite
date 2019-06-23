@@ -2,12 +2,46 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../app';
 import { User, userService } from '../models/User';
+import { Property, propertyService } from '../models/Property';
 import userHelper from '../helpers/userHelper';
 
 chai.use(chaiHttp);
 const { expect } = chai;
 
 describe('Users', () => {
+  it('should be able to view a specific property', (done) => {
+    const dummyProperty = new Property({
+      id: 1,
+      owner: 1,
+      price: 10009,
+      state: 'Oyo',
+      city: 'Ibadan',
+      address: 'Abule EHba',
+      type: '2 Bedroom',
+      created_on: 'Sun Jun 23 2019',
+      image_url:
+        'http://res.cloudinary.com/sidehustle/image/upload/v1561272329/hqdbfkokynnxpy2te26a.png',
+    });
+    propertyService.createProperty(dummyProperty);
+    chai
+      .request(server)
+      .get('/api/v1/property/1')
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql(1);
+        done();
+      });
+  });
+  it('should see an error if a specific property is not found', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/property/2')
+      .end((err, res) => {
+        expect(res.status).to.eql(400);
+        expect(res.body.status).to.eql('error');
+        done();
+      });
+  });
   it('should be able to view all properties', (done) => {
     chai
       .request(server)

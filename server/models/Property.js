@@ -13,6 +13,8 @@ class Property {
     type,
     createdOn,
     imageUrl,
+    ownerEmail,
+    ownerPhoneNumber,
   }) {
     this.id = id;
     this.owner = owner;
@@ -24,6 +26,8 @@ class Property {
     this.type = type;
     this.created_on = createdOn;
     this.image_url = imageUrl;
+    this.ownerEmail = ownerEmail;
+    this.ownerPhoneNumber = ownerPhoneNumber;
   }
 }
 export { Property, propertyService };
