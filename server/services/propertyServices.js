@@ -7,6 +7,7 @@ class propertyServices {
     function isPropertyId(property) {
       return property.id === id;
     }
+
     return this.properties.find(isPropertyId);
   }
 
@@ -16,6 +17,14 @@ class propertyServices {
 
   fetchAll() {
     return this.properties;
+  }
+
+  fetchByType(type) {
+    function isPropertyType(property) {
+      return property.type === type;
+    }
+
+    return this.properties.filter(isPropertyType);
   }
 }
 
