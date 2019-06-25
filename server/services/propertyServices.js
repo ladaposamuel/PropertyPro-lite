@@ -4,11 +4,7 @@ class propertyServices {
   }
 
   fetchById(id) {
-    function isPropertyId(property) {
-      return property.id === id;
-    }
-
-    return this.properties.find(isPropertyId);
+    return this.properties.find(property => property.id === id);
   }
 
   createProperty(property) {
@@ -25,6 +21,18 @@ class propertyServices {
     }
 
     return this.properties.filter(isPropertyType);
+  }
+
+  deleteById(id) {
+    console.log('TCL: propertyServices -> deleteById -> id', id);
+    const result = this.fetchById(id);
+    console.log('TCL: propertyServices -> deleteById -> result', result);
+    if (result) {
+      const delety = this.properties.indexOf(result);
+      console.log('TCL: propertyServices -> deleteById -> delety', delety);
+      this.properties.splice(delety, 1);
+    }
+    return result;
   }
 }
 
