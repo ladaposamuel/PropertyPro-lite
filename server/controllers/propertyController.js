@@ -54,7 +54,7 @@ const PropertyController = {
             const newProperty = new Property({
               id: allProperties.length + 1,
               owner,
-              status,
+              status: status || 'available',
               price,
               state,
               city,
@@ -100,6 +100,20 @@ const PropertyController = {
       data: {
         message: 'Property Deleted successfully',
       },
+    });
+  },
+  soldProperty(req, res) {
+    const { id } = req.params;
+    const result = propertyService.markAsSold(parseInt(id, 10));
+    if (!result) {
+      return res.status(404).send({
+        status: 'error',
+        error: 'No Property found with such ID',
+      });
+    }
+    return res.send({
+      status: 'success',
+      data: result,
     });
   },
 };
