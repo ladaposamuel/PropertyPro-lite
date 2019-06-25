@@ -8,11 +8,10 @@ const PropertyController = {
     const { id } = req.params;
     const fetchById = propertyService.fetchById(parseInt(id, 10));
     if (!fetchById) {
-      return res.status(400)
-        .send({
-          status: 'error',
-          error: 'Property not found!',
-        });
+      return res.status(400).send({
+        status: 'error',
+        error: 'Property not found!',
+      });
     }
     return res.send({
       status: 1,
@@ -40,11 +39,10 @@ const PropertyController = {
     } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400)
-        .json({
-          status: 'error',
-          error: errors.array()[0].msg,
-        });
+      return res.status(400).json({
+        status: 'error',
+        error: errors.array()[0].msg,
+      });
     }
     if (userHelper.checkifAgent(owner)) {
       // upload image
@@ -71,25 +69,38 @@ const PropertyController = {
               data: newProperty,
             });
           })
-          .catch(err => res.status(400)
-            .json({
-              status: 'error',
-              error: err,
-            }));
-      } else {
-        return res.status(400)
-          .send({
+          .catch(err => res.status(400).send({
             status: 'error',
-            error: 'You need to attach an Image to your property',
-          });
+            error: err,
+          }));
+      } else {
+        return res.status(400).send({
+          status: 'error',
+          error: 'You need to attach an Image to your property',
+        });
       }
     } else {
-      return res.status(400)
-        .send({
-          status: 'error',
-          error: 'User not found or not an agent.',
-        });
+      return res.status(400).send({
+        status: 'error',
+        error: 'User not found or not an agent.',
+      });
     }
+  },
+  deleteProperty(req, res) {
+    const { id } = req.params;
+    const result = propertyService.deleteById(parseInt(id, 10));
+    if (!result) {
+      return res.status(404).send({
+        status: 'error',
+        error: 'No Property found with such ID',
+      });
+    }
+    return res.send({
+      status: 'success',
+      data: {
+        message: 'Property Deleted successfully',
+      },
+    });
   },
 };
 

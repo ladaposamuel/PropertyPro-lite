@@ -8,6 +8,8 @@ const router = express.Router();
 router.get('/property/', PropertyController.viewPropertyAll);
 router.get('/property/:id', PropertyController.viewProperty);
 
+router.delete('/property/:id', PropertyController.deleteProperty);
+
 router.post(
   '/property/',
   validator.propertyValidation,
