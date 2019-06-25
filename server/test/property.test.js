@@ -311,4 +311,38 @@ describe('Agents', () => {
         done();
       });
   });
+  it('should be able mark a property as sold', (done) => {
+    const dummyProperty = new Property({
+      id: 1,
+      owner: 1,
+      price: 10009,
+      state: 'Oyo',
+      city: 'Ibadan',
+      address: 'Abule EHba',
+      type: '2 Bedroom',
+      created_on: 'Sun Jun 23 2019',
+      image_url:
+        'http://res.cloudinary.com/sidehustle/image/upload/v1561272329/hqdbfkokynnxpy2te26a.png',
+    });
+    propertyService.createProperty(dummyProperty);
+    chai
+      .request(server)
+      .patch('/api/v1/property/1/sold')
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body.data.status).to.eql('sold');
+        done();
+      });
+  });
+  it('should see an error if trying to mark an unavailable property as sold', (done) => {
+    chai
+      .request(server)
+      .patch('/api/v1/property/19/sold')
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        expect(res.body.status).to.eql('error');
+        done();
+      });
+  });
 });
