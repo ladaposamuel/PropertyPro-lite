@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get('/property/', PropertyController.viewPropertyAll);
 router.get('/property/:id', PropertyController.viewProperty);
+router.patch('/property/:id/sold', PropertyController.soldProperty);
 
 router.delete('/property/:id', PropertyController.deleteProperty);
 
