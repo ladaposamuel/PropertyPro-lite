@@ -23,6 +23,14 @@ class propertyServices {
     return this.properties.filter(isPropertyType);
   }
 
+  markAsSold(id) {
+    const result = this.fetchById(id);
+    if (result) {
+      result.status = 'sold';
+    }
+    return result;
+  }
+
   deleteById(id) {
     const result = this.fetchById(id);
     if (result) {
