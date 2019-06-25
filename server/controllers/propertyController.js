@@ -69,7 +69,7 @@ const PropertyController = {
               data: newProperty,
             });
           })
-          .catch(err => res.status(400).json({
+          .catch(err => res.status(400).send({
             status: 'error',
             error: err,
           }));
@@ -90,9 +90,9 @@ const PropertyController = {
     const { id } = req.params;
     const result = propertyService.deleteById(parseInt(id, 10));
     if (!result) {
-      return res.send({
-        status: 404,
-        message: 'No Property found with such ID',
+      return res.status(404).send({
+        status: 'error',
+        error: 'No Property found with such ID',
       });
     }
     return res.send({

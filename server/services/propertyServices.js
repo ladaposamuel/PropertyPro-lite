@@ -24,12 +24,9 @@ class propertyServices {
   }
 
   deleteById(id) {
-    console.log('TCL: propertyServices -> deleteById -> id', id);
     const result = this.fetchById(id);
-    console.log('TCL: propertyServices -> deleteById -> result', result);
     if (result) {
       const delety = this.properties.indexOf(result);
-      console.log('TCL: propertyServices -> deleteById -> delety', delety);
       this.properties.splice(delety, 1);
     }
     return result;
