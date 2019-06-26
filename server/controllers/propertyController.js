@@ -6,6 +6,7 @@ import { validationResult } from 'express-validator/check';
 import { propertyService } from '../models/Property';
 import userHelper from '../helpers/userHelper';
 import { uploader } from '../config/cloudinaryConfig';
+import { flagService, Flag } from '../models/Flag';
 
 const PropertyController = {
   /**
@@ -157,6 +158,43 @@ const PropertyController = {
       status: 'success',
       data: result,
     });
+  },
+  /**
+   * @description Method to flag a property
+   * @param {object} req request object
+   * @param {object} res response object
+   * @return {object} returns an object containing the the message of the action
+   */
+  flagProperty(req, res) {
+    let response;
+    const { id } = req.params;
+    const { reason, description } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        status: 'error',
+        error: errors.array()[0].msg,
+      });
+    }
+    const result = propertyService.fetchById(parseInt(id, 10));
+    if (result) {
+      const flag = new Flag({
+        property_id: id,
+        reason,
+        description,
+      });
+      flagService.flagProperty(flag);
+      response = res.status(200).send({
+        status: 'success',
+        data: flag,
+      });
+    } else {
+      response = res.status(404).send({
+        status: 'error',
+        error: 'No Property found with such ID',
+      });
+    }
+    return response;
   },
 };
 
