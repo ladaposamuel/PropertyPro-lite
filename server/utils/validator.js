@@ -66,8 +66,20 @@ const propertyValidation = [
     .isString(),
 ];
 
+const propertyFlagValidation = [
+  body('reason')
+    .isString()
+    .withMessage('Please provide a flag reason')
+    .trim(),
+  body('description')
+    .isString()
+    .withMessage('Please provide a flag description')
+    .trim(),
+];
+
 module.exports = {
   signUpValidation,
   signInValidation,
   propertyValidation,
+  propertyFlagValidation,
 };

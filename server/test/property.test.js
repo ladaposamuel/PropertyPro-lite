@@ -107,6 +107,81 @@ describe('Users', () => {
         done();
       });
   });
+  it('should be able to flag properties', (done) => {
+    const dummyProperty = new Property({
+      id: 200,
+      owner: 1,
+      price: 10009,
+      state: 'Oyo',
+      city: 'Ibadan',
+      address: 'Abule EHba',
+      type: 'Flat',
+      created_on: 'Sun Jun 23 2019',
+      image_url:
+        'http://res.cloudinary.com/sidehustle/image/upload/v1561272329/hqdbfkokynnxpy2te26a.png',
+    });
+    propertyService.createProperty(dummyProperty);
+    const flag = {
+      reason: 'price',
+      description: 'Price is way too much',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/property/flag/200')
+      .send(flag)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        done();
+      });
+  });
+  it('should see an error if trying to flag unavailable property', (done) => {
+    const flag = {
+      property_id: 0,
+      reason: 'price',
+      description: 'Price is way too much',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/property/flag/99')
+      .send(flag)
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        expect(res.body.status).to.eql('error');
+        expect(res.body.error).to.eql('No Property found with such ID');
+        done();
+      });
+  });
+  it('should see an error if trying to flag with no reason', (done) => {
+    const flag = {
+      description: 'Price is way too much',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/property/flag/99')
+      .send(flag)
+      .end((err, res) => {
+        expect(res.status).to.eql(400);
+        expect(res.body.status).to.eql('error');
+        expect(res.body.error).to.eql('Please provide a flag reason');
+        done();
+      });
+  });
+  it('should see an error if trying to flag with no description', (done) => {
+    const flag = {
+      reason: 'price',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/property/flag/9')
+      .send(flag)
+      .end((err, res) => {
+        expect(res.status).to.eql(400);
+        expect(res.body.status).to.eql('error');
+        expect(res.body.error).to.eql('Please provide a flag description');
+        done();
+      });
+  });
 });
 
 describe('Agents', () => {
