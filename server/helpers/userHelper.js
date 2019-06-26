@@ -8,5 +8,10 @@ class userHelper {
     }
     return false;
   }
+
+  static getUserDetail(id, data) {
+    const userData = userService.fetchUserById(id);
+    return userData[data];
+  }
 }
 export default userHelper;

@@ -1,3 +1,5 @@
+import userHelper from '../helpers/userHelper';
+
 class propertyServices {
   constructor() {
     this.properties = [];
@@ -8,7 +10,23 @@ class propertyServices {
   }
 
   createProperty(property) {
-    this.properties.push(property);
+    const allProperties = this.fetchAll();
+    const newProperty = {
+      id: property.id ? property.id : allProperties.length + 1,
+      owner: property.owner,
+      status: property.status || 'available',
+      price: property.price,
+      state: property.state,
+      city: property.city,
+      address: property.address,
+      type: property.type,
+      ownerPhoneNumber: userHelper.getUserDetail(property.owner, 'phoneNumber'),
+      ownerEmail: userHelper.getUserDetail(property.owner, 'email'),
+      createdOn: new Date().toDateString(),
+      image_url: property.image_url,
+    };
+    this.properties.push(newProperty);
+    return newProperty;
   }
 
   fetchAll() {

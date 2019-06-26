@@ -127,7 +127,7 @@ describe('Agents', () => {
     expect(validateAgent).to.be.true;
     done();
   });
-  it('should be able to post properties', (done) => {
+  it('should be able to post properties', async () => {
     const dummyUser = new User({
       id: 50,
       firstName: 'Sam',
@@ -148,28 +148,25 @@ describe('Agents', () => {
       owner: 50,
       imageData: dummyData.dummyImage(),
     };
-    chai
+    const res = await chai
       .request(server)
       .post('/api/v1/property')
-      .send(property)
-      .end((err, res) => {
-        expect(res.status).to.eql(200);
-        expect(res.body.status).to.eql('success');
-        expect(res.body.data).to.have.property('owner');
-        expect(res.body.data).to.have.property('price');
-        expect(res.body.data)
-          .to.have.property('state')
-          .to.be.a('string');
-        expect(res.body.data)
-          .to.have.property('city')
-          .to.be.a('string');
-        expect(res.body.data)
-          .to.have.property('address')
-          .to.be.a('string');
-        expect(res.body.data).to.have.property('image_url');
-        done();
-      });
-  }).timeout(10000);
+      .send(property);
+    expect(res.status).to.eql(200);
+    expect(res.body.status).to.eql('success');
+    expect(res.body.data).to.have.property('owner');
+    expect(res.body.data).to.have.property('price');
+    expect(res.body.data)
+      .to.have.property('state')
+      .to.be.a('string');
+    expect(res.body.data)
+      .to.have.property('city')
+      .to.be.a('string');
+    expect(res.body.data)
+      .to.have.property('address')
+      .to.be.a('string');
+    expect(res.body.data).to.have.property('image_url');
+  }).timeout(20000);
   it('should be see an error if property price not stated', (done) => {
     const dummyUser = new User({
       id: 50,
@@ -200,7 +197,7 @@ describe('Agents', () => {
         expect(res.body.error).to.eql('A valid price/amount is required');
         done();
       });
-  }).timeout(10000);
+  });
   it('should be see an error if property state address not stated', (done) => {
     const property = {
       price: 10000.0,
@@ -220,15 +217,16 @@ describe('Agents', () => {
         expect(res.body.error).to.eql('Please enter the state where property is located');
         done();
       });
-  }).timeout(10000);
+  });
   it('should be see an error if wrong file uploaded', (done) => {
     const property = {
       price: 10000.0,
       address: 'Abule EHba',
       city: 'Ibadan',
+      state: 'Oyo',
       type: '2 Bedroom',
       owner: 50,
-      imageData: dummyData.dummyImage(),
+      imageData: 'wrong encoded image',
     };
     chai
       .request(server)
@@ -239,7 +237,7 @@ describe('Agents', () => {
         expect(res.body.status).to.eql('error');
         done();
       });
-  }).timeout(10000);
+  });
   it('should be see an error if no image uploaded', (done) => {
     const property = {
       price: 10000.0,
@@ -262,36 +260,22 @@ describe('Agents', () => {
       });
   });
   it('should be able to delete a property', (done) => {
-    const dummyProperty = new Property(
-      {
-        id: 1,
-        owner: 1,
-        price: 10009,
-        state: 'Oyo',
-        city: 'Ibadan',
-        address: 'Abule EHba',
-        type: '2 Bedroom',
-        created_on: 'Sun Jun 23 2019',
-        image_url:
-          'http://res.cloudinary.com/sidehustle/image/upload/v1561272329/hqdbfkokynnxpy2te26a.png',
-      },
-      {
-        id: 2,
-        owner: 1,
-        price: 10009,
-        state: 'Lagos',
-        city: 'Lagos',
-        address: 'Abule EHba',
-        type: '2 Bedroom',
-        created_on: 'Sun Jun 23 2019',
-        image_url:
-          'http://res.cloudinary.com/sidehustle/image/upload/v1561272329/hqdbfkokynnxpy2te26a.png',
-      },
-    );
+    const dummyProperty = {
+      id: 99,
+      owner: 1,
+      price: 10009,
+      state: 'Oyo',
+      city: 'Ibadan',
+      address: 'Abule EHba',
+      type: '2 Bedroom',
+      created_on: 'Sun Jun 23 2019',
+      image_url:
+        'http://res.cloudinary.com/sidehustle/image/upload/v1561272329/hqdbfkokynnxpy2te26a.png',
+    };
     propertyService.createProperty(dummyProperty);
     chai
       .request(server)
-      .delete('/api/v1/property/1')
+      .delete('/api/v1/property/99')
       .end((err, res) => {
         expect(res.status).to.eql(200);
         expect(res.body.status).to.eql('success');
@@ -309,8 +293,8 @@ describe('Agents', () => {
       });
   });
   it('should be able mark a property as sold', (done) => {
-    const dummyProperty = new Property({
-      id: 1,
+    const dummyProperty = {
+      id: 20,
       owner: 1,
       price: 10009,
       state: 'Oyo',
@@ -320,11 +304,11 @@ describe('Agents', () => {
       created_on: 'Sun Jun 23 2019',
       image_url:
         'http://res.cloudinary.com/sidehustle/image/upload/v1561272329/hqdbfkokynnxpy2te26a.png',
-    });
+    };
     propertyService.createProperty(dummyProperty);
     chai
       .request(server)
-      .patch('/api/v1/property/1/sold')
+      .patch('/api/v1/property/20/sold')
       .end((err, res) => {
         expect(res.status).to.eql(200);
         expect(res.body.status).to.eql('success');
@@ -343,8 +327,8 @@ describe('Agents', () => {
       });
   });
   it('should be able to update a property', (done) => {
-    const dummyProperty = new Property({
-      id: 11,
+    const dummyProperty = {
+      id: 119,
       owner: 1,
       price: 10009,
       state: 'Oyo',
@@ -354,11 +338,11 @@ describe('Agents', () => {
       created_on: 'Sun Jun 23 2019',
       image_url:
         'http://res.cloudinary.com/sidehustle/image/upload/v1561272329/hqdbfkokynnxpy2te26a.png',
-    });
+    };
     propertyService.createProperty(dummyProperty);
     chai
       .request(server)
-      .patch('/api/v1/property/11')
+      .patch('/api/v1/property/119')
       .send({ price: 20000 })
       .end((err, res) => {
         expect(res.status).to.eql(200);
