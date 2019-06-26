@@ -116,6 +116,21 @@ const PropertyController = {
       data: result,
     });
   },
+  updateProperty(req, res) {
+    const { id } = req.params;
+    const result = propertyService.fetchById(parseInt(id, 10));
+    if (!result) {
+      return res.status(404).send({
+        status: 'error',
+        error: 'No Property found with such ID',
+      });
+    }
+    Object.assign(result, req.body);
+    return res.send({
+      status: 'success',
+      data: result,
+    });
+  },
 };
 
 export default PropertyController;
