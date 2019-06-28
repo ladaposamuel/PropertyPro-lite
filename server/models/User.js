@@ -13,6 +13,7 @@ class User {
     address,
     password,
     isAgent,
+    resetToken,
     createdDate,
     modifiedDate,
   }) {
@@ -26,6 +27,7 @@ class User {
     this.address = address;
     this.password = password;
     this.isAgent = isAgent || false;
+    this.reset_token = resetToken || null;
     this.createdDate = createdDate;
     this.modifiedDate = modifiedDate;
   }
