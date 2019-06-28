@@ -77,9 +77,18 @@ const propertyFlagValidation = [
     .trim(),
 ];
 
+const passwordResetValidation = [
+  body('email')
+    .isEmail()
+    .withMessage('A valid email is required')
+    .normalizeEmail()
+    .trim(),
+];
+
 module.exports = {
   signUpValidation,
   signInValidation,
   propertyValidation,
   propertyFlagValidation,
+  passwordResetValidation,
 };
