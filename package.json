@@ -1,21 +1,24 @@
 {
-  "name": "PropertyProLite",
+  "name": "propertypro_lite",
   "version": "1.0.0",
   "description": "Property Pro Lite is a platform where people can create and/or search properties for sale or rent.",
   "main": "index.js",
   "scripts": {
+    "start": "node ./server/build/app.js",
     "dev": "nodemon --exec babel-node ./server/app.js",
     "pretest": "eslint --ignore-path .gitignore .",
     "test": "nyc mocha --timeout 10000 --require @babel/register ./server/test --exit",
-    "build": "rm -rf ./build && babel -d ./build ./server -s",
-    "coverage": "nyc report --reporter=lcov --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=lcov --reporter=text-lcov | coveralls",
+    "clean": "rm -rf ./server/build && mkdir ./server/build",
+    "copy-redoc": "cp -R ./server/redoc.html ./server/build/redoc.html",
+    "build": "npm run clean && babel -d ./server/build ./server && npm run copy-redoc"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ladaposamuel/PropertyPro-lite.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ladapo Samuel",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/ladaposamuel/PropertyPro-lite/issues"
