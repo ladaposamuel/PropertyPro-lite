@@ -30,6 +30,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "cloudinary": "^1.14.0",
+    "cors": "^2.8.5",
     "datauri": "^2.0.0",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
