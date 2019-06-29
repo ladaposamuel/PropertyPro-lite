@@ -85,10 +85,21 @@ const passwordResetValidation = [
     .trim(),
 ];
 
+const newPasswordValidation = [
+  body(
+    'password',
+    'Please enter a password with only text and numbers and at least 6 characters long',
+  )
+    .trim()
+    .isLength({ min: 6 })
+    .isAlphanumeric(),
+];
+
 module.exports = {
   signUpValidation,
   signInValidation,
   propertyValidation,
   propertyFlagValidation,
   passwordResetValidation,
+  newPasswordValidation,
 };
