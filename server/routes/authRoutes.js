@@ -48,5 +48,6 @@ const router = express.Router();
 router.post('/signup', validator.signUpValidation, UserController.create);
 router.post('/signin', validator.signInValidation, UserController.login);
 router.post('/reset', validator.passwordResetValidation, UserController.resetPassword);
+router.post('/new-password', validator.newPasswordValidation, UserController.newPassword);
 
 export default router;
