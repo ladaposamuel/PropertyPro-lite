@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import bodyParser from 'body-parser';
+import cors from 'cors';
 import authRoutes from './routes/authRoutes';
 import propertyRoutes from './routes/propertyRoutes';
 
@@ -8,9 +8,9 @@ const swaggerJSDoc = require('swagger-jsdoc');
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
 
 // -- setup up swagger-jsdoc --
 const swaggerDefinition = {
@@ -46,7 +46,13 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/', propertyRoutes);
+app.use((req, res) => {
+  res.status(404).json('Error! Route does not exist');
+});
 
-app.listen(3000);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log('server has started');
+});
 // console.log('app running on port ', 3000);
 module.exports = app;
