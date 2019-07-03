@@ -39,7 +39,7 @@ cd propertypro
 npm install
 
 # Create a .env file to root folder using the example file
-type env.example > .env
+cp env.example > .env
 
 # Then simply start your app
 npm run dev
