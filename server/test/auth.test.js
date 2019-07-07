@@ -29,6 +29,17 @@ before((done) => {
 )`,
     () => done(),
   );
+  const user = new User({
+    id: 1,
+    firstName: 'Sam',
+    lastName: 'Samuel',
+    email: 'police@mail.io',
+    phone: '000',
+    address: 'Heaven Land street',
+    password: 'sam1111997',
+    isAgent: 'false',
+  });
+  userService.createUser(user);
 });
 
 describe('Test User Sign up', () => {
