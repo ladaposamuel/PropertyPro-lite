@@ -3,8 +3,10 @@ import uuid from 'uuid';
 import dotenv from 'dotenv';
 import { validationResult } from 'express-validator/check';
 import nodemailer from 'nodemailer';
-import { User, userService } from '../models/User';
+import { userService } from '../models/User';
 import { resetPasswordEmailTemplate } from '../mail_templates/password_reset';
+import db from '../database/index';
+import userHelper from '../helpers/userHelper';
 
 dotenv.config();
 const saltRounds = 10;
@@ -20,7 +22,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const UserController = {
-  create(req, res) {
+  async create(req, res) {
     const {
       firstName, lastName, email, address, isAgent, password, phoneNumber,
     } = req.body;
@@ -31,27 +33,42 @@ const UserController = {
         error: errors.array()[0].msg,
       });
     }
-    const allUsers = userService.fetchUsers();
-    const newUser = new User({
-      id: allUsers.length + 1,
-      token: uuid.v4(),
+    const hashPassword = userHelper.hashPassword(password);
+    const createQuery = `INSERT INTO
+    users (first_name , last_name, email, phone_number, address, password, is_agent, created_date, modified_date)
+    VALUES ($1, $2, $3, $4, $5, $6 ,$7, $8 , $9)
+    returning *`;
+    const values = [
       firstName,
       lastName,
       email,
       phoneNumber,
       address,
-      password,
+      hashPassword,
       isAgent,
-      createdDate: new Date().toDateString(),
-      modifiedDate: new Date().toDateString(),
-    });
+      new Date().toDateString(),
+      new Date().toDateString(),
+    ];
 
-    userService.createUser(newUser);
-    const user = {
-      status: 'success',
-      data: newUser,
-    };
-    return res.status(201).send(user);
+    try {
+      const { rows } = await db.query(createQuery, values);
+      const token = userHelper.generateToken(rows[0].id);
+      rows[0].token = token;
+      return res.status(201).send({
+        status: 'success',
+        data: rows[0],
+      });
+    } catch (error) {
+      if (error.routine === '_bt_check_unique') {
+        return res
+          .status(400)
+          .send({ status: 'error', error: 'User with that EMAIL already exist' });
+      }
+      return res.status(400).send({
+        status: 'error',
+        error: 'Database error',
+      });
+    }
   },
   login(req, res) {
     const { email, password } = req.body;
