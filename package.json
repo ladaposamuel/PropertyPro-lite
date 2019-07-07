@@ -10,7 +10,7 @@
     "migrate": "npm run drop-table && npm run create-table",
     "dev": "nodemon --exec babel-node ./server/app.js",
     "pretest": "eslint --ignore-path .gitignore .",
-    "test": "nyc mocha --timeout 10000 --require @babel/register ./server/test --exit",
+    "test": "NODE_ENV=test nyc mocha --timeout 10000 --require @babel/register ./server/test --exit",
     "coverage": "nyc report --reporter=lcov --reporter=text-lcov | coveralls",
     "clean": "rm -rf ./server/build && mkdir ./server/build",
     "copy-redoc": "cp -R ./server/redoc.html ./server/build/redoc.html",

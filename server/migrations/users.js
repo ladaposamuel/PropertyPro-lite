@@ -4,8 +4,16 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+let db = process.env.DEV_DATABASE_URL;
+if (process.env.NODE_ENV === 'test') {
+  db = process.env.TEST_DATABASE_URL;
+}
+if (process.env.NODE_ENV === 'production') {
+  db = process.env.DATABASE_URL;
+}
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: db,
 });
 
 pool.on('connect', () => {
@@ -34,11 +42,11 @@ const createUserTable = () => {
   pool
     .query(queryText)
     .then((res) => {
-      console.log('User table created successfully');
+      console.log('User table created successfully: ', res);
       pool.end();
     })
     .catch((err) => {
-      console.log('Could not create user table');
+      console.log('Could not create user table', err);
       pool.end();
     });
 };
@@ -51,16 +59,13 @@ const dropUserTable = () => {
   pool
     .query(queryText)
     .then((res) => {
-      console.log('Dropped users table');
+      console.log('Dropped users table', res);
       pool.end();
     })
     .catch((err) => {
-      console.log('Could not drop user table');
+      console.log('Could not drop user table', err);
       pool.end();
     });
 };
 
-export {
-  createUserTable,
-  dropUserTable,
-};
+export { createUserTable, dropUserTable };
