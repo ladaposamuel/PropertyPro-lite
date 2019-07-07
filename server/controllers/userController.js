@@ -61,12 +61,12 @@ const UserController = {
     } catch (error) {
       if (error.routine === '_bt_check_unique') {
         return res
-          .status(400)
+          .status(409)
           .send({ status: 'error', error: 'User with that EMAIL already exist' });
       }
-      return res.status(400).send({
+      return res.status(422).send({
         status: 'error',
-        error: 'Database error',
+        error: 'User could not be created, Please try again.',
       });
     }
   },
