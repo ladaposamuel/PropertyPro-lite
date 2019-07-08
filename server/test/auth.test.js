@@ -251,10 +251,10 @@ describe('Test User Sign up', () => {
 
 describe('Test User Sign in Route', () => {
   it('should validate user email', (done) => {
-    const user = new User({
+    const user = {
       email: 'sam@mail',
       password: 'sam1111997',
-    });
+    };
     chai
       .request(server)
       .post('/api/v1/auth/signin')
@@ -270,10 +270,10 @@ describe('Test User Sign in Route', () => {
       });
   });
   it('should ensure user enters acceptable password', (done) => {
-    const user = new User({
+    const user = {
       email: 'sam@mail.io',
       password: '1',
-    });
+    };
     chai
       .request(server)
       .post('/api/v1/auth/signin')
@@ -291,20 +291,10 @@ describe('Test User Sign in Route', () => {
       });
   });
   it('should return success and token when correct details are passed along', (done) => {
-    const dummyUser = new User({
-      firstName: 'Sam',
-      lastName: 'Samuel',
-      email: 'sam@mail.io',
-      phone: 'sam@8888',
-      address: 'Heaven Land street',
+    const user = {
+      email: 'police@mail.io',
       password: 'sam1111997',
-      isAgent: true,
-    });
-    userService.createUser(dummyUser);
-    const user = new User({
-      email: 'sam@mail.io',
-      password: 'sam1111997',
-    });
+    };
     chai
       .request(server)
       .post('/api/v1/auth/signin')
@@ -316,16 +306,6 @@ describe('Test User Sign in Route', () => {
       });
   });
   it('should return error if wrong email or password is passed along', (done) => {
-    const dummyUser = new User({
-      firstName: 'Sam',
-      lastName: 'Samuel',
-      email: 'sam@mail.io',
-      phone: 'sam@8888',
-      address: 'Heaven Land street',
-      password: 'sam1111997',
-      isAgent: true,
-    });
-    userService.createUser(dummyUser);
     const user = { email: 'james@mail.com', password: 'police' };
     chai
       .request(server)

@@ -70,7 +70,7 @@ const UserController = {
       });
     }
   },
-  login(req, res) {
+  async login(req, res) {
     const { email, password } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -79,18 +79,32 @@ const UserController = {
         error: errors.array()[0].msg,
       });
     }
-    const user = userService.loginUser(req.body);
-    user.token = uuid.v4();
-    if (email !== 'sam@mail.io' || password !== 'sam1111997') {
-      return res.status(400).send({
+
+    const text = 'SELECT * FROM users WHERE email = $1';
+    try {
+      const { rows } = await db.query(text, [email]);
+      if (!rows[0]) {
+        return res
+          .status(400)
+          .send({ status: 'error', error: 'The credentials you provided is incorrect' });
+      }
+      if (!userHelper.comparePassword(rows[0].password, password)) {
+        return res
+          .status(400)
+          .send({ status: 'error', error: 'The credentials you provided is incorrect' });
+      }
+      const token = userHelper.generateToken(rows[0].id);
+      rows[0].token = token;
+      return res.status(200).send({
+        status: 'success',
+        data: rows[0],
+      });
+    } catch (error) {
+      return res.status(422).send({
         status: 'error',
-        error: 'Invalid email or password',
+        error: 'User could not be signed in, Please try again.',
       });
     }
-    return res.send({
-      status: 'success',
-      data: user,
-    });
   },
   resetPassword(req, res) {
     let response;
