@@ -1,4 +1,3 @@
-// src/usingDB/controllers/Helper.js
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { userService } from '../models/User';
@@ -34,6 +33,17 @@ class userHelper {
       { expiresIn: '7d' },
     );
     return token;
+  }
+
+  static generateRandom(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
   }
 }
 export default userHelper;

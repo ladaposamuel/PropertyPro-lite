@@ -77,13 +77,6 @@ const propertyFlagValidation = [
     .trim(),
 ];
 
-const passwordResetValidation = [
-  body('email')
-    .isEmail()
-    .withMessage('A valid email is required')
-    .normalizeEmail()
-    .trim(),
-];
 
 const newPasswordValidation = [
   body(
@@ -100,6 +93,5 @@ module.exports = {
   signInValidation,
   propertyValidation,
   propertyFlagValidation,
-  passwordResetValidation,
   newPasswordValidation,
 };

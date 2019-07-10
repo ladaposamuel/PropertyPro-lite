@@ -322,23 +322,18 @@ describe('Test User Password Reset', () => {
   it('should send user reset email', (done) => {
     chai
       .request(server)
-      .post('/api/v1/auth/reset')
-      .send({ email: 'police@mail.io' })
+      .post('/api/v1/auth/police@mail.io/reset_password')
+      .send({})
       .end((err, res) => {
-        expect(res.status).to.eql(200);
-        expect(res.body)
-          .to.have.property('status')
-          .to.eql('success');
-        expect(res.body.data.message).to.eql('Email sent. Check your inbox');
-        expect(res.body.data.token).to.be.a('string');
+        expect(res.status).to.eql(204);
         done();
       });
   });
   it('should return error if user not found', (done) => {
     chai
       .request(server)
-      .post('/api/v1/auth/reset')
-      .send({ email: 'james@sam.io' })
+      .post('/api/v1/auth/james@sam.io/reset_password')
+      .send({})
       .end((err, res) => {
         expect(res.status).to.eql(404);
         expect(res.body)
@@ -350,134 +345,23 @@ describe('Test User Password Reset', () => {
   it('should ensure user provides a valid email', (done) => {
     chai
       .request(server)
-      .post('/api/v1/auth/reset')
-      .send({ email: '' })
+      .post('/api/v1/auth/reset_password')
+      .send({})
       .end((err, res) => {
-        expect(res.status).to.eql(400);
-        expect(res.body)
-          .to.have.property('status')
-          .to.eql('error');
-        done();
-      });
-  });
-  it('should return status 400 if password not set', (done) => {
-    const user = userService.fetchUserById(1);
-    chai
-      .request(server)
-      .post('/api/v1/auth/new-password')
-      .send({
-        email: user.email,
-        token: 'token',
-        type: 'reset',
-      })
-      .end((err, res) => {
-        expect(res.status).to.eql(400);
-        expect(res.body)
-          .to.have.property('status')
-          .to.eql('error');
-        expect(res.body.error).to.eql(
-          'Please enter a password with only text and numbers and at least 6 characters long',
-        );
-        done();
-      });
-  });
-  it('should return status 400 if token not set', (done) => {
-    const user = userService.fetchUserById(1);
-    chai
-      .request(server)
-      .post('/api/v1/auth/new-password')
-      .send({
-        email: user.email,
-        password: 'newPass',
-        type: 'reset',
-      })
-      .end((err, res) => {
-        expect(res.status).to.eql(400);
-        expect(res.body)
-          .to.have.property('status')
-          .to.eql('error');
-        expect(res.body.error).to.eql('No token is provided');
-        done();
-      });
-  });
-  it('should return error with wrong reset token', (done) => {
-    const user = userService.fetchUserById(1);
-    chai
-      .request(server)
-      .post('/api/v1/auth/new-password')
-      .send({
-        email: user.email,
-        token: 'token',
-        password: 'newPass',
-        type: 'reset',
-      })
-      .end((err, res) => {
-        expect(res.status).to.eql(400);
-        expect(res.body)
-          .to.have.property('status')
-          .to.eql('error');
-        expect(res.body.error).to.eql('Invalid token');
+        expect(res.status).to.eql(404);
         done();
       });
   });
   it('should reset user password', (done) => {
-    const user = userService.fetchUserById(1);
     chai
       .request(server)
-      .post('/api/v1/auth/new-password')
+      .post('/api/v1/auth/police@mail.io/reset_password')
       .send({
-        email: user.email,
-        token: user.resetToken,
-        password: 'newPass',
-        type: 'reset',
+        password: 'NewPassword1_',
+        newPassword: 'NewPassword2_',
       })
       .end((err, res) => {
-        expect(res.status).to.eql(200);
-        expect(res.body)
-          .to.have.property('status')
-          .to.eql('success');
-        done();
-      });
-  });
-  it('should return error if user not found', (done) => {
-    chai
-      .request(server)
-      .post('/api/v1/auth/new-password')
-      .send({
-        email: 'jamy@mm.cc',
-        password: 'rrrrrrrr',
-      })
-      .end((err, res) => {
-        expect(res.status).to.eql(404);
-        expect(res.body)
-          .to.have.property('status')
-          .to.eql('error');
-        done();
-      });
-  });
-  it('should check reset expiry time', (done) => {
-    const user = userService.fetchUserById(1);
-    userService.updateUser(
-      {
-        resetTime: 999999999,
-      },
-      1,
-    );
-    chai
-      .request(server)
-      .post('/api/v1/auth/new-password')
-      .send({
-        email: user.email,
-        token: user.resetToken,
-        password: 'newPass',
-        type: 'reset',
-      })
-      .end((err, res) => {
-        expect(res.status).to.eql(400);
-        expect(res.body)
-          .to.have.property('status')
-          .to.eql('error');
-
+        expect(res.status).to.eql(204);
         done();
       });
   });

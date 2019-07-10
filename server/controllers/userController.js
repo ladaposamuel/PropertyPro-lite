@@ -1,17 +1,11 @@
-import bcrypt from 'bcrypt';
-import uuid from 'uuid';
 import dotenv from 'dotenv';
 import { validationResult } from 'express-validator/check';
 import nodemailer from 'nodemailer';
-import { userService } from '../models/User';
 import { resetPasswordEmailTemplate } from '../mail_templates/password_reset';
 import db from '../database/index';
 import userHelper from '../helpers/userHelper';
 
 dotenv.config();
-const saltRounds = 10;
-const salt = bcrypt.genSaltSync(saltRounds);
-
 const transporter = nodemailer.createTransport({
   host: 'smtp.mailtrap.io',
   port: 2525,
@@ -106,97 +100,55 @@ const UserController = {
       });
     }
   },
-  resetPassword(req, res) {
-    let response;
-    const { email } = req.body;
-    const user = userService.fetchUserByEmail(email);
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        status: 'error',
-        error: errors.array()[0].msg,
-      });
+  async resetPassword(req, res) {
+    const { email } = req.params;
+    const { password, newPassword } = req.body;
+
+    let defaultPassword = userHelper.generateRandom(10);
+
+    if (process.env.NODE_ENV === 'test') {
+      defaultPassword = 'NewPassword1_';
     }
-    if (!user) {
-      return res.status(404).json({
-        status: 'error',
-        error: 'Email not available',
-      });
+
+    let hashPassword = userHelper.hashPassword(defaultPassword);
+    if (!email) {
+      return res.status(400).send({ status: 'error', error: 'Please provide an email' });
     }
-    const resetToken = uuid.v4();
-    userService.updateUser(
-      {
-        resetToken,
-        resetTime: Date.now(),
-      },
-      user.id,
-    );
-    const messageBody = resetPasswordEmailTemplate(
-      req.headers.host,
-      resetToken,
-      email,
-      new Date().getFullYear(),
-    );
-    const mailOptions = {
-      from: 'PropertPro-Lite',
-      to: email,
-      subject: 'Password Request on PropertyPro-Lite',
-      html: messageBody,
-    };
-    transporter.sendMail(mailOptions, (err) => {
-      if (err) {
+    const text = 'SELECT * FROM users WHERE email = $1';
+    try {
+      const { rows } = await db.query(text, [email]);
+      if (!rows[0]) {
+        return res.status(404).send({ status: 'error', error: 'Email not available' });
+      }
+      if (password && newPassword) {
+        if (!userHelper.comparePassword(rows[0].password, password)) {
+          return res.status(400).send({ status: 'error', error: 'Old password is not correct' });
+        }
+        hashPassword = userHelper.hashPassword(newPassword);
+      }
+      const updatePassword = 'UPDATE users set password = $1 where email = $2';
+      db.query(updatePassword, [hashPassword, email]);
+      const messageBody = resetPasswordEmailTemplate(defaultPassword, new Date().getFullYear());
+      const mailOptions = {
+        from: 'PropertPro-Lite',
+        to: email,
+        subject: 'Password reset-PropertyPro-Lite',
+        html: messageBody,
+      };
+      const sendEmail = await transporter.sendMail(mailOptions);
+      if (!sendEmail.messageId) {
         return res.status(400).json({
           status: 'error',
           error: 'Reset password email could not be sent',
         });
       }
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          message: 'Email sent. Check your inbox',
-          token: resetToken,
-          resetTime: Date.now(),
-        },
-      });
-    });
-
-    return response;
-  },
-
-  newPassword(req, res) {
-    const errors = validationResult(req);
-    const user = userService.fetchUserByEmail(req.body.email);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
+    } catch (error) {
+      return res.status(422).send({
         status: 'error',
-        error: errors.array()[0].msg,
+        error: 'User passsword could not be reset, Please try again.',
       });
     }
-    if (!user) {
-      return res.status(404).json({
-        status: 'error',
-        error: 'Email not available',
-      });
-    }
-    if (!req.body.token) {
-      return res.status(400).send({ status: 'error', error: 'No token is provided' });
-    }
-    const receivedToken = req.body.token;
-    const currentTime = Date.now();
-    const { password } = req.body;
-    if (user.resetToken !== receivedToken) {
-      return res.status(400).send({ status: 'error', error: 'Invalid token' });
-    }
-    if (currentTime - user.resetTime > 3600000) {
-      return res
-        .status(400)
-        .send({ status: 'error', error: 'Link has expired. Request for another reset link.' });
-    }
-    userService.updateUser({ password: bcrypt.hashSync(password, salt) }, user.id);
-    return res.send({
-      status: 'success',
-      data: user,
-    });
+    return res.status(204).json({});
   },
 };
 
