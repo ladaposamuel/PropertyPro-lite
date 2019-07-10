@@ -1,13 +1,40 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../app';
-import { User, userService } from '../models/User';
 import { Property, propertyService } from '../models/Property';
-import userHelper from '../helpers/userHelper';
-import dummyData from '../utils/dummy';
+import userData from './data/userData';
+import propertyData from './data/propertyData';
+import db from '../database';
 
+import userHelper from '../helpers/userHelper';
+
+const path = require('path');
+
+let token;
 chai.use(chaiHttp);
 const { expect } = chai;
+
+before((done) => {
+  db.query('DROP TABLE IF EXISTS property CASCADE', () => done());
+});
+before((done) => {
+  db.query(
+    `CREATE TABLE property (
+      id serial PRIMARY KEY,
+      agent_id Integer NOT NULL,
+      status TEXT NOT NULL,
+      state TEXT NOT NULL,
+      city TEXT NOT NULL,
+      price Float NOT NULL,
+      address TEXT NOT NULL,
+      type TEXT NOT NULL,
+      image_url  TEXT NOT NULL,
+      created_on TIMESTAMP NOT NULL,
+      updated_on TIMESTAMP NOT NULL
+)`,
+    () => done(),
+  );
+});
 
 describe('Users', () => {
   it('should be able to view a property', (done) => {
@@ -74,36 +101,6 @@ describe('Users', () => {
       .end((err, res) => {
         expect(res.status).to.eql(200);
         expect(res.body.status).to.eql(1);
-        done();
-      });
-  });
-  it('should not be able to post properties', (done) => {
-    const dummyUser = new User({
-      id: 4,
-      firstName: 'Sam',
-      lastName: 'Samuel',
-      email: 'sam@mail.io',
-      phone: 'sam@8888',
-      address: 'Heaven Land street',
-      password: 'sam1111997',
-      isAgent: false,
-    });
-    userService.createUser(dummyUser);
-    const property = {
-      price: 10009.0,
-      state: 'Oyo',
-      address: 'Abule EHba',
-      city: 'Ibadan',
-      type: '2 Bedroom',
-      owner: 4,
-    };
-    chai
-      .request(server)
-      .post('/api/v1/property')
-      .send(property)
-      .end((err, res) => {
-        expect(res.status).to.eql(400);
-        expect(res.body.status).to.eql('error');
         done();
       });
   });
@@ -185,51 +182,24 @@ describe('Users', () => {
 });
 
 describe('Agents', () => {
-  it('should be validated before can post', (done) => {
-    const dummyUser = new User({
-      id: 9,
-      firstName: 'Sam',
-      lastName: 'Samuel',
-      email: 'sam@mail.io',
-      phone: 'sam@8888',
-      address: 'Heaven Land street',
-      password: 'sam1111997',
-      isAgent: true,
-    });
-    userService.createUser(dummyUser);
-    const validateAgent = userHelper.checkifAgent(9);
-    // eslint-disable-next-line no-unused-expressions
-    expect(validateAgent).to.be.true;
-    done();
+  const { user } = userData;
+  const { property } = propertyData;
+  before(() => {
+    token = userHelper.generateToken(user.demoUser);
   });
+
   it('should be able to post properties', async () => {
-    const dummyUser = new User({
-      id: 50,
-      firstName: 'Sam',
-      lastName: 'Samuel',
-      email: 'sam@mail.io',
-      phone: 'sam@8888',
-      address: 'Heaven Land street',
-      password: 'sam1111997',
-      isAgent: true,
-    });
-    userService.createUser(dummyUser);
-    const property = {
-      price: 10009,
-      state: 'Oyo',
-      address: 'Abule EHba',
-      city: 'Ibadan',
-      type: '2 Bedroom',
-      owner: 50,
-      imageData: dummyData.dummyImage(),
-    };
     const res = await chai
       .request(server)
       .post('/api/v1/property')
-      .send(property);
-    expect(res.status).to.eql(200);
+      .set('x-access-token', token)
+      .field('Content-Type', 'multipart/form-data')
+      .field(property)
+      .type('form')
+      .attach('image', path.join(__dirname, '../test/data/test.png'), 'test.png');
+    expect(res.status).to.eql(201);
     expect(res.body.status).to.eql('success');
-    expect(res.body.data).to.have.property('owner');
+    expect(res.body.data).to.have.property('agent_id');
     expect(res.body.data).to.have.property('price');
     expect(res.body.data)
       .to.have.property('state')
@@ -243,29 +213,17 @@ describe('Agents', () => {
     expect(res.body.data).to.have.property('image_url');
   }).timeout(20000);
   it('should be see an error if property price not stated', (done) => {
-    const dummyUser = new User({
-      id: 50,
-      firstName: 'Sam',
-      lastName: 'Samuel',
-      email: 'sam@mail.io',
-      phone: 'sam@8888',
-      address: 'Heaven Land street',
-      password: 'sam1111997',
-      isAgent: true,
-    });
-    userService.createUser(dummyUser);
-    const property = {
-      state: 'Oyo',
-      address: 'Abule EHba',
-      city: 'Ibadan',
-      type: '2 Bedroom',
-      owner: 50,
-      imageData: dummyData.dummyImage(),
-    };
     chai
       .request(server)
       .post('/api/v1/property')
-      .send(property)
+      .type('form')
+      .set('x-access-token', token)
+      .send({
+        state: property.state,
+        city: property.city,
+        address: property.address,
+        type: property.type,
+      })
       .end((err, res) => {
         expect(res.status).to.eql(400);
         expect(res.body.status).to.eql('error');
@@ -273,19 +231,18 @@ describe('Agents', () => {
         done();
       });
   });
-  it('should be see an error if property state address not stated', (done) => {
-    const property = {
-      price: 10000.0,
-      address: 'Abule EHba',
-      city: 'Ibadan',
-      type: '2 Bedroom',
-      owner: 50,
-      imageData: dummyData.dummyImage(),
-    };
+  it('should be see an error if property state not stated', (done) => {
     chai
       .request(server)
       .post('/api/v1/property')
-      .send(property)
+      .type('form')
+      .set('x-access-token', token)
+      .send({
+        price: property.price,
+        address: property.address,
+        city: property.city,
+        type: property.type,
+      })
       .end((err, res) => {
         expect(res.status).to.eql(400);
         expect(res.body.status).to.eql('error');
@@ -293,147 +250,36 @@ describe('Agents', () => {
         done();
       });
   });
-  it('should be see an error if wrong file uploaded', (done) => {
-    const property = {
-      price: 10000.0,
-      address: 'Abule EHba',
-      city: 'Ibadan',
-      state: 'Oyo',
-      type: '2 Bedroom',
-      owner: 50,
-      imageData: 'wrong encoded image',
-    };
+  it('should be see an error if property address not stated', (done) => {
     chai
       .request(server)
       .post('/api/v1/property')
-      .send(property)
+      .type('form')
+      .set('x-access-token', token)
+      .send({
+        price: property.price,
+        state: property.state,
+        city: property.city,
+        type: property.type,
+      })
       .end((err, res) => {
         expect(res.status).to.eql(400);
         expect(res.body.status).to.eql('error');
+        expect(res.body.error).to.eql('Please enter the address where property is located');
         done();
       });
   });
   it('should be see an error if no image uploaded', (done) => {
-    const property = {
-      price: 10000.0,
-      state: 'Oyo',
-      address: 'Abule EHba',
-      city: 'Ibadan',
-      type: '2 Bedroom',
-      owner: 50,
-    };
     chai
       .request(server)
       .post('/api/v1/property')
+      .type('form')
+      .set('x-access-token', token)
       .send(property)
       .end((err, res) => {
         expect(res.status).to.eql(400);
         expect(res.body.status).to.eql('error');
         expect(res.body.error).to.eql('You need to attach an Image to your property');
-
-        done();
-      });
-  });
-  it('should be able to delete a property', (done) => {
-    const dummyProperty = {
-      id: 99,
-      owner: 1,
-      price: 10009,
-      state: 'Oyo',
-      city: 'Ibadan',
-      address: 'Abule EHba',
-      type: '2 Bedroom',
-      created_on: 'Sun Jun 23 2019',
-      image_url:
-        'http://res.cloudinary.com/sidehustle/image/upload/v1561272329/hqdbfkokynnxpy2te26a.png',
-    };
-    propertyService.createProperty(dummyProperty);
-    chai
-      .request(server)
-      .delete('/api/v1/property/99')
-      .end((err, res) => {
-        expect(res.status).to.eql(200);
-        expect(res.body.status).to.eql('success');
-        done();
-      });
-  });
-  it('should see an error if trying to delete an unavailable property', (done) => {
-    chai
-      .request(server)
-      .delete('/api/v1/property/31')
-      .end((err, res) => {
-        expect(res.status).to.eql(404);
-        expect(res.body.status).to.eql('error');
-        done();
-      });
-  });
-  it('should be able mark a property as sold', (done) => {
-    const dummyProperty = {
-      id: 20,
-      owner: 1,
-      price: 10009,
-      state: 'Oyo',
-      city: 'Ibadan',
-      address: 'Abule EHba',
-      type: '2 Bedroom',
-      created_on: 'Sun Jun 23 2019',
-      image_url:
-        'http://res.cloudinary.com/sidehustle/image/upload/v1561272329/hqdbfkokynnxpy2te26a.png',
-    };
-    propertyService.createProperty(dummyProperty);
-    chai
-      .request(server)
-      .patch('/api/v1/property/20/sold')
-      .end((err, res) => {
-        expect(res.status).to.eql(200);
-        expect(res.body.status).to.eql('success');
-        expect(res.body.data.status).to.eql('sold');
-        done();
-      });
-  });
-  it('should see an error if trying to mark an unavailable property as sold', (done) => {
-    chai
-      .request(server)
-      .patch('/api/v1/property/19/sold')
-      .end((err, res) => {
-        expect(res.status).to.eql(404);
-        expect(res.body.status).to.eql('error');
-        done();
-      });
-  });
-  it('should be able to update a property', (done) => {
-    const dummyProperty = {
-      id: 119,
-      owner: 1,
-      price: 10009,
-      state: 'Oyo',
-      city: 'Ibadan',
-      address: 'Abule EHba',
-      type: '2 Bedroom',
-      created_on: 'Sun Jun 23 2019',
-      image_url:
-        'http://res.cloudinary.com/sidehustle/image/upload/v1561272329/hqdbfkokynnxpy2te26a.png',
-    };
-    propertyService.createProperty(dummyProperty);
-    chai
-      .request(server)
-      .patch('/api/v1/property/119')
-      .send({ price: 20000 })
-      .end((err, res) => {
-        expect(res.status).to.eql(200);
-        expect(res.body.status).to.eql('success');
-        expect(res.body.data.price).to.eql(20000);
-        done();
-      });
-  });
-  it('should be see an error if trying to update an unavalable property', (done) => {
-    chai
-      .request(server)
-      .patch('/api/v1/property/120')
-      .send({ price: 20000 })
-      .end((err, res) => {
-        expect(res.status).to.eql(404);
-        expect(res.body.status).to.eql('error');
         done();
       });
   });
