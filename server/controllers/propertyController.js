@@ -3,10 +3,14 @@
  * handles every property related task
  */
 import { validationResult } from 'express-validator/check';
+import dotenv from 'dotenv';
+import { dataUri } from '../middleware/multerUpload';
 import { propertyService } from '../models/Property';
-import userHelper from '../helpers/userHelper';
 import { uploader } from '../config/cloudinaryConfig';
 import { flagService, Flag } from '../models/Flag';
+import db from '../database/index';
+
+dotenv.config();
 
 const PropertyController = {
   /**
@@ -55,8 +59,8 @@ const PropertyController = {
    * @param {object} res response object
    * @return {object} returns an object containing the posted property
    */
-  postProperty(req, res) {
-    const { owner, imageData } = req.body;
+  async postProperty(req, res) {
+    const { user } = req;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -64,37 +68,42 @@ const PropertyController = {
         error: errors.array()[0].msg,
       });
     }
-    let propertyResp;
-    if (userHelper.checkifAgent(owner)) {
-      // upload image
-      if (imageData) {
-        uploader
-          .upload(imageData)
-          .then((result) => {
-            req.body.image_url = result.url;
-            const property = propertyService.createProperty(req.body);
-            propertyResp = res.send({
-              status: 'success',
-              data: property,
-            });
-          })
-          .catch(err => res.status(400).send({
-            status: 'error',
-            error: err,
-          }));
-      } else {
-        propertyResp = res.status(400).send({
-          status: 'error',
-          error: 'You need to attach an Image to your property',
-        });
+    try {
+      if (!req.file) {
+        return res
+          .status(400)
+          .send({ status: 'error', error: 'You need to attach an Image to your property' });
       }
-    } else {
-      propertyResp = res.status(400).send({
+      const file = dataUri(req).content;
+      const imageFile = await uploader.upload(file, result => result.secure_url);
+      const imageUrl = imageFile.secure_url;
+      const creatQuery = `INSERT INTO 
+            property (agent_id, price , status, state, city, address, type, image_url, created_on,updated_on) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7 ,$8, $9, $10) RETURNING *`;
+      const values = [
+        user.id,
+        req.body.price,
+        req.body.status || 'available',
+        req.body.state,
+        req.body.city,
+        req.body.address,
+        req.body.type,
+        imageUrl,
+        new Date().toDateString(),
+        new Date().toDateString(),
+      ];
+      const newProperty = await db.query(creatQuery, values);
+      const property = newProperty.rows[0];
+      return res.status(201).send({
+        status: 'success',
+        data: property,
+      });
+    } catch (error) {
+      return res.status(400).send({
         status: 'error',
-        error: 'User not found or not an agent.',
+        error: `Could not save property, Please try again ${error}`,
       });
     }
-    return propertyResp;
   },
   /**
    * @description Method to delete a property

@@ -46,7 +46,7 @@ const UserController = {
 
     try {
       const { rows } = await db.query(createQuery, values);
-      const token = userHelper.generateToken(rows[0].id);
+      const token = userHelper.generateToken(rows[0]);
       rows[0].token = token;
       return res.status(201).send({
         status: 'success',
@@ -87,7 +87,7 @@ const UserController = {
           .status(400)
           .send({ status: 'error', error: 'The credentials you provided is incorrect' });
       }
-      const token = userHelper.generateToken(rows[0].id);
+      const token = userHelper.generateToken(rows[0]);
       rows[0].token = token;
       return res.status(200).send({
         status: 'success',
