@@ -19,18 +19,19 @@ const PropertyController = {
    * @param {object} res response object
    * @return {object} returns an object containing the details of the property
    */
-  viewProperty(req, res) {
+  async viewProperty(req, res) {
     const { id } = req.params;
-    const fetchById = propertyService.fetchById(parseInt(id, 10));
-    if (!fetchById) {
+    const query = 'SELECT * FROM property where id = $1';
+    const { rows } = await db.query(query, [id]);
+    if (!rows[0]) {
       return res.status(400).send({
         status: 'error',
         error: 'Property not found!',
       });
     }
     return res.send({
-      status: 1,
-      data: fetchById,
+      status: 'success',
+      data: rows[0],
     });
   },
   /**
@@ -39,18 +40,22 @@ const PropertyController = {
    * @param {object} res response object
    * @return {object} returns an array of objects containing all properties
    */
-  viewPropertyAll(req, res) {
+  async viewPropertyAll(req, res) {
+    let query;
+    let properties;
     const propertyType = req.query.type;
-    let data = {};
     if (propertyType) {
-      data = propertyService.fetchByType(propertyType);
+      query = 'SELECT * FROM property where type = $1';
+      const { rows } = await db.query(query, [propertyType]);
+      properties = rows;
     } else {
-      data = propertyService.fetchAll();
+      query = 'SELECT * FROM property';
+      const { rows } = await db.query(query);
+      properties = rows;
     }
-
     return res.send({
-      status: 1,
-      data,
+      status: 'success',
+      data: properties,
     });
   },
   /**
