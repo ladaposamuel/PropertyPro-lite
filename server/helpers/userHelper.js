@@ -24,14 +24,8 @@ class userHelper {
     return bcrypt.compareSync(password, hashPassword);
   }
 
-  static generateToken(id) {
-    const token = jwt.sign(
-      {
-        userId: id,
-      },
-      process.env.SECRET,
-      { expiresIn: '7d' },
-    );
+  static generateToken(user) {
+    const token = jwt.sign(user, process.env.SECRET, { expiresIn: '7d' });
     return token;
   }
 
