@@ -2,6 +2,8 @@ import express from 'express';
 import validator from '../utils/validator';
 import PropertyController from '../controllers/propertyController';
 import { cloudinaryConfig } from '../config/cloudinaryConfig';
+import { multerUploads } from '../middleware/multerUpload';
+import Auth from '../middleware/auth';
 
 const router = express.Router();
 
@@ -155,8 +157,7 @@ router.post(
 
 router.post(
   '/property/',
-  validator.propertyValidation,
-  cloudinaryConfig,
+  [Auth.verifyToken, Auth.agent, multerUploads, cloudinaryConfig, validator.propertyValidation],
   PropertyController.postProperty,
 );
 
