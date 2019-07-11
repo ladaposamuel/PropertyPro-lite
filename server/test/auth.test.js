@@ -1,7 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../app';
-import { User, userService } from '../models/User';
 import db from '../database';
 
 chai.use(chaiHttp);
@@ -29,17 +28,6 @@ before((done) => {
 )`,
     () => done(),
   );
-  const user = new User({
-    id: 1,
-    firstName: 'Sam',
-    lastName: 'Samuel',
-    email: 'police@mail.io',
-    phone: '000',
-    address: 'Heaven Land street',
-    password: 'sam1111997',
-    isAgent: 'false',
-  });
-  userService.createUser(user);
 });
 
 describe('Test User Sign up', () => {
@@ -53,7 +41,7 @@ describe('Test User Sign up', () => {
       });
   });
   it('should validate user email', (done) => {
-    const user = new User({
+    const user = {
       firstName: 'Sam',
       lastName: 'Samuel',
       email: 'sam@mail',
@@ -61,7 +49,7 @@ describe('Test User Sign up', () => {
       address: 'Heaven Land street',
       password: 'sam1111997',
       isAgent: 'false',
-    });
+    };
     chai
       .request(server)
       .post('/api/v1/auth/signup')
@@ -77,7 +65,7 @@ describe('Test User Sign up', () => {
       });
   });
   it('should ensure user enters acceptable password', (done) => {
-    const user = new User({
+    const user = {
       firstName: 'Sam',
       lastName: 'Samuel',
       email: 'sam@mail.io',
@@ -85,7 +73,7 @@ describe('Test User Sign up', () => {
       address: 'Heaven Land street',
       password: '1',
       isAgent: 'false',
-    });
+    };
     chai
       .request(server)
       .post('/api/v1/auth/signup')
@@ -127,14 +115,14 @@ describe('Test User Sign up', () => {
       });
   });
   it('should return error if lastName is not present ', (done) => {
-    const user = new User({
+    const user = {
       firstName: 'Sam',
       email: 'sam@mail.io',
       phone: '000',
       address: 'Heaven Land street',
       password: 'sam1111997',
       isAgent: 'false',
-    });
+    };
     chai
       .request(server)
       .post('/api/v1/auth/signup')
@@ -150,14 +138,14 @@ describe('Test User Sign up', () => {
       });
   });
   it('should return error if firstName is not present ', (done) => {
-    const user = new User({
+    const user = {
       lastName: 'Samuel',
       email: 'sam@mail.io',
       phone: '000',
       address: 'Heaven Land street',
       password: 'sam1111997',
       isAgent: 'false',
-    });
+    };
     chai
       .request(server)
       .post('/api/v1/auth/signup')
