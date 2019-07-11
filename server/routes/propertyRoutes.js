@@ -158,7 +158,7 @@ router.patch(
 );
 router.get('/property/:id', PropertyController.viewProperty);
 router.patch('/property/:id/sold', [Auth.verifyToken, Auth.agent], PropertyController.soldProperty);
-router.delete('/property/:id', PropertyController.deleteProperty);
+router.delete('/property/:id', [Auth.verifyToken, Auth.agent], PropertyController.deleteProperty);
 router.post(
   '/property/flag/:id',
   validator.propertyFlagValidation,
