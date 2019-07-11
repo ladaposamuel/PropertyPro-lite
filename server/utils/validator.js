@@ -66,6 +66,31 @@ const propertyValidation = [
     .isString(),
 ];
 
+const updatePropertyValidation = [
+  body('price')
+    .isFloat()
+    .withMessage('A valid price/amount is required')
+    .optional()
+    .trim(),
+  body('state', 'Please enter the state where property is located')
+    .trim()
+    .optional()
+    .isString(),
+  body('city', 'Please enter the city where property is located')
+    .trim()
+    .optional()
+    .isString(),
+  body('address', 'Please enter the address where property is located')
+    .trim()
+    .optional()
+    .isString(),
+  body('type', 'Please enter the type of the property')
+    .trim()
+    .optional()
+
+    .isString(),
+];
+
 const propertyFlagValidation = [
   body('reason')
     .isString()
@@ -92,5 +117,6 @@ module.exports = {
   signInValidation,
   propertyValidation,
   propertyFlagValidation,
+  updatePropertyValidation,
   newPasswordValidation,
 };
