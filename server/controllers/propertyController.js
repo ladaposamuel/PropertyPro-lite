@@ -5,9 +5,7 @@
 import { validationResult } from 'express-validator/check';
 import dotenv from 'dotenv';
 import { dataUri } from '../middleware/multerUpload';
-import { propertyService } from '../models/Property';
 import { uploader } from '../config/cloudinaryConfig';
-import { flagService, Flag } from '../models/Flag';
 import db from '../database/index';
 
 dotenv.config();
@@ -21,18 +19,25 @@ const PropertyController = {
    */
   async viewProperty(req, res) {
     const { id } = req.params;
-    const query = 'SELECT * FROM property where id = $1';
-    const { rows } = await db.query(query, [id]);
-    if (!rows[0]) {
+    try {
+      const query = 'SELECT * FROM property where id = $1';
+      const { rows } = await db.query(query, [id]);
+      if (!rows[0]) {
+        return res.status(400).send({
+          status: 'error',
+          error: 'Property not found!',
+        });
+      }
+      return res.send({
+        status: 'success',
+        data: rows[0],
+      });
+    } catch (error) {
       return res.status(400).send({
         status: 'error',
-        error: 'Property not found!',
+        error: 'Could not view property, Please try again',
       });
     }
-    return res.send({
-      status: 'success',
-      data: rows[0],
-    });
   },
   /**
    * @description Method to view all properties
@@ -43,20 +48,27 @@ const PropertyController = {
   async viewPropertyAll(req, res) {
     let query;
     let properties;
-    const propertyType = req.query.type;
-    if (propertyType) {
-      query = 'SELECT * FROM property where type = $1';
-      const { rows } = await db.query(query, [propertyType]);
-      properties = rows;
-    } else {
-      query = 'SELECT * FROM property';
-      const { rows } = await db.query(query);
-      properties = rows;
+    try {
+      const propertyType = req.query.type;
+      if (propertyType) {
+        query = 'SELECT * FROM property where type = $1';
+        const { rows } = await db.query(query, [propertyType]);
+        properties = rows;
+      } else {
+        query = 'SELECT * FROM property';
+        const { rows } = await db.query(query);
+        properties = rows;
+      }
+      return res.send({
+        status: 'success',
+        data: properties,
+      });
+    } catch (error) {
+      return res.status(400).send({
+        status: 'error',
+        error: 'Could not view all property, Please try again',
+      });
     }
-    return res.send({
-      status: 'success',
-      data: properties,
-    });
   },
   /**
    * @description Method to post a property
@@ -233,10 +245,9 @@ const PropertyController = {
    * @param {object} res response object
    * @return {object} returns an object containing the the message of the action
    */
-  flagProperty(req, res) {
+  async flagProperty(req, res) {
     let response;
     const { id } = req.params;
-    const { reason, description } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -244,25 +255,35 @@ const PropertyController = {
         error: errors.array()[0].msg,
       });
     }
-    const result = propertyService.fetchById(parseInt(id, 10));
-    if (result) {
-      const flag = new Flag({
-        property_id: id,
-        reason,
-        description,
-      });
-      flagService.flagProperty(flag);
-      response = res.status(200).send({
-        status: 'success',
-        data: flag,
-      });
-    } else {
-      response = res.status(404).send({
+    try {
+      const queryText = 'SELECT * from property where id = $1';
+      const { rows } = await db.query(queryText, [id]);
+      if (rows[0]) {
+        const flagQueryText = 'INSERT into flag (property_id, reason, description, reporter, created_on) VALUES ($1, $2 , $3 , $4 , $5) returning *';
+        const flagQuery = await db.query(flagQueryText, [
+          id,
+          req.body.reason,
+          req.body.description,
+          req.user.id,
+          new Date().toDateString(),
+        ]);
+        response = res.status(200).send({
+          status: 'success',
+          data: flagQuery.rows[0],
+        });
+      } else {
+        response = res.status(404).send({
+          status: 'error',
+          error: 'No Property found with such ID',
+        });
+      }
+      return response;
+    } catch (error) {
+      return res.status(400).send({
         status: 'error',
-        error: 'No Property found with such ID',
+        error: 'Could not flag property, Please try again',
       });
     }
-    return response;
   },
 };
 

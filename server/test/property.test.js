@@ -1,7 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../app';
-import { Property, propertyService } from '../models/Property';
 import userData from './data/userData';
 import propertyData from './data/propertyData';
 import db from '../database';
@@ -14,11 +13,12 @@ let token;
 chai.use(chaiHttp);
 const { expect } = chai;
 
-before((done) => {
-  db.query('DROP TABLE IF EXISTS property CASCADE', () => done());
+before(async () => {
+  await db.query('DROP TABLE IF EXISTS property CASCADE');
+  await db.query('DROP TABLE IF EXISTS flag CASCADE');
 });
-before((done) => {
-  db.query(
+before(async () => {
+  await db.query(
     `CREATE TABLE property (
       id serial PRIMARY KEY,
       agent_id Integer NOT NULL,
@@ -32,7 +32,16 @@ before((done) => {
       created_on TIMESTAMP NOT NULL,
       updated_on TIMESTAMP NOT NULL
 )`,
-    () => done(),
+  );
+  await db.query(
+    `CREATE TABLE flag (
+      id serial PRIMARY KEY,
+      property_id Integer NOT NULL,
+      reason TEXT NOT NULL,
+      description TEXT NOT NULL,
+      reporter Integer NOT NULL,
+      created_on TIMESTAMP NOT NULL
+)`,
   );
   const creatQuery = `INSERT INTO 
             property (agent_id, price , status, state, city, address, type, image_url, created_on,updated_on) 
@@ -49,7 +58,7 @@ before((done) => {
     new Date().toDateString(),
     new Date().toDateString(),
   ];
-  db.query(creatQuery, values);
+  await db.query(creatQuery, values);
 });
 describe('Agents', () => {
   const { user } = userData;
@@ -317,43 +326,44 @@ describe('Users', () => {
         done();
       });
   });
+  it('should be logged in to flag a property', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/property/2/flag')
+      .end((err, res) => {
+        expect(res.status).to.eql(401);
+        expect(res.body.error).to.eql('Access denied. No token provided.');
+        done();
+      });
+  });
+
   it('should be able to flag properties', (done) => {
-    const dummyProperty = new Property({
-      id: 200,
-      owner: 1,
-      price: 10009,
-      state: 'Oyo',
-      city: 'Ibadan',
-      address: 'Abule EHba',
-      type: 'Flat',
-      created_on: 'Sun Jun 23 2019',
-      image_url:
-        'http://res.cloudinary.com/sidehustle/image/upload/v1561272329/hqdbfkokynnxpy2te26a.png',
-    });
-    propertyService.createProperty(dummyProperty);
     const flag = {
       reason: 'price',
       description: 'Price is way too much',
     };
     chai
       .request(server)
-      .post('/api/v1/property/flag/200')
+      .post('/api/v1/property/2/flag')
+      .set('x-access-token', token)
       .send(flag)
       .end((err, res) => {
         expect(res.status).to.eql(200);
         expect(res.body.status).to.eql('success');
+        expect(res.body.data.reason).to.eql('price');
+        expect(res.body.data.description).to.eql('Price is way too much');
         done();
       });
   });
   it('should see an error if trying to flag unavailable property', (done) => {
     const flag = {
-      property_id: 0,
       reason: 'price',
       description: 'Price is way too much',
     };
     chai
       .request(server)
-      .post('/api/v1/property/flag/99')
+      .post('/api/v1/property/99/flag')
+      .set('x-access-token', token)
       .send(flag)
       .end((err, res) => {
         expect(res.status).to.eql(404);
@@ -368,7 +378,8 @@ describe('Users', () => {
     };
     chai
       .request(server)
-      .post('/api/v1/property/flag/99')
+      .post('/api/v1/property/2/flag')
+      .set('x-access-token', token)
       .send(flag)
       .end((err, res) => {
         expect(res.status).to.eql(400);
@@ -383,7 +394,8 @@ describe('Users', () => {
     };
     chai
       .request(server)
-      .post('/api/v1/property/flag/9')
+      .post('/api/v1/property/2/flag')
+      .set('x-access-token', token)
       .send(flag)
       .end((err, res) => {
         expect(res.status).to.eql(400);
