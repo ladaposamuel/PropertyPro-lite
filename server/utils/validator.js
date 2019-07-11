@@ -64,9 +64,6 @@ const propertyValidation = [
   body('type', 'Please enter the type of the property')
     .trim()
     .isString(),
-  body('agent_id', 'Agent not found')
-    .trim()
-    .isInt(),
 ];
 
 const propertyFlagValidation = [

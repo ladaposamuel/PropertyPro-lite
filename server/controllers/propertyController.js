@@ -138,19 +138,28 @@ const PropertyController = {
    * @param {object} res response object
    * @return {object} returns an object containing the details of the property
    */
-  soldProperty(req, res) {
-    const { id } = req.params;
-    const result = propertyService.markAsSold(parseInt(id, 10));
-    if (!result) {
+  async soldProperty(req, res) {
+    try {
+      let { id } = req.params;
+      id = parseInt(id, 10);
+      const query = 'UPDATE property set status = $1 where id = $2 and agent_id = $3 RETURNING *';
+      const { rows } = await db.query(query, ['sold', id, req.user.id]);
+      if (!rows[0]) {
+        return res.status(404).send({
+          status: 'error',
+          error: 'No Property found with such ID',
+        });
+      }
+      return res.send({
+        status: 'success',
+        data: rows[0],
+      });
+    } catch (e) {
       return res.status(404).send({
         status: 'error',
-        error: 'No Property found with such ID',
+        error: 'Could not update property as sold, please try again',
       });
     }
-    return res.send({
-      status: 'success',
-      data: result,
-    });
   },
   /**
    * @description Method to update a property
@@ -158,20 +167,28 @@ const PropertyController = {
    * @param {object} res response object
    * @return {object} returns an object containing the details of the property
    */
-  updateProperty(req, res) {
-    const { id } = req.params;
-    const result = propertyService.fetchById(parseInt(id, 10));
-    if (!result) {
-      return res.status(404).send({
+  async updateProperty(req, res) {
+    let { id } = req.params;
+    try {
+      id = parseInt(id, 10);
+      const query = 'UPDATE property set status = $1 where id = $2 and agent_id = $3';
+      const { rows } = await db.query(query, ['sold', id, req.user.id]);
+      if (!rows[0]) {
+        return res.status(404).send({
+          status: 'error',
+          error: 'No Property found with such ID',
+        });
+      }
+      return res.send({
+        status: 'success',
+        data: rows[0],
+      });
+    } catch (e) {
+      return res.status(400).send({
         status: 'error',
-        error: 'No Property found with such ID',
+        data: 'Could not update property as sold, please try again',
       });
     }
-    Object.assign(result, req.body);
-    return res.send({
-      status: 'success',
-      data: result,
-    });
   },
   /**
    * @description Method to flag a property
