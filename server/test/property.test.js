@@ -164,6 +164,61 @@ describe('Agents', () => {
         done();
       });
   });
+  it('should be able update property details', (done) => {
+    chai
+      .request(server)
+      .patch('/api/v1/property/1')
+      .type('form')
+      .set('x-access-token', token)
+      .send({
+        price: property.price,
+      })
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body.data).to.be.an('object');
+        done();
+      });
+  });
+  it('should be able to update property image', async () => {
+    const res = await chai
+      .request(server)
+      .patch('/api/v1/property/1')
+      .set('x-access-token', token)
+      .field('Content-Type', 'multipart/form-data')
+      .type('form')
+      .attach('image', path.join(__dirname, '../test/data/test.png'), 'test.png');
+    expect(res.status).to.eql(200);
+    expect(res.body.status).to.eql('success');
+    expect(res.body.data).to.have.property('agent_id');
+    expect(res.body.data).to.have.property('price');
+    expect(res.body.data)
+      .to.have.property('state')
+      .to.be.a('string');
+    expect(res.body.data)
+      .to.have.property('city')
+      .to.be.a('string');
+    expect(res.body.data)
+      .to.have.property('address')
+      .to.be.a('string');
+    expect(res.body.data).to.have.property('image_url');
+  }).timeout(20000);
+  it('should be provide valid price details', (done) => {
+    chai
+      .request(server)
+      .patch('/api/v1/property/1')
+      .type('form')
+      .set('x-access-token', token)
+      .send({
+        price: 'wrong',
+      })
+      .end((err, res) => {
+        expect(res.status).to.eql(400);
+        expect(res.body.status).to.eql('error');
+        expect(res.body.error).to.eql('A valid price/amount is required');
+        done();
+      });
+  });
 });
 
 describe('Users', () => {
