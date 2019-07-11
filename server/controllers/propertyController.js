@@ -116,21 +116,29 @@ const PropertyController = {
    * @param {object} res response object
    * @return {object} returns an object containing the the message of the action
    */
-  deleteProperty(req, res) {
+  async deleteProperty(req, res) {
     const { id } = req.params;
-    const result = propertyService.deleteById(parseInt(id, 10));
-    if (!result) {
-      return res.status(404).send({
+    try {
+      const queryText = 'DELETE from property where id = $1 and agent_id = $2 RETURNING *';
+      const rows = await db.query(queryText, [id, req.user.id]);
+      if (!rows.rowCount) {
+        return res.status(404).send({
+          status: 'error',
+          error: 'No Property found with such ID',
+        });
+      }
+      return res.send({
+        status: 'success',
+        data: {
+          message: 'Property Deleted successfully',
+        },
+      });
+    } catch (error) {
+      return res.status(400).send({
         status: 'error',
-        error: 'No Property found with such ID',
+        error: `Could not delete property, Please try again ${error}`,
       });
     }
-    return res.send({
-      status: 'success',
-      data: {
-        message: 'Property Deleted successfully',
-      },
-    });
   },
   /**
    * @description Method to mark property as sold
