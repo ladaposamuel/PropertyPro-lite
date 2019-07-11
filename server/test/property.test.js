@@ -137,6 +137,33 @@ describe('Agents', () => {
         done();
       });
   });
+  it('should be able to mark a property as sold', (done) => {
+    chai
+      .request(server)
+      .patch('/api/v1/property/1/sold')
+      .type('form')
+      .set('x-access-token', token)
+      .send({})
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body.data).to.be.an('object');
+        done();
+      });
+  });
+  it('should see an error if marking a wrong property as sold', (done) => {
+    chai
+      .request(server)
+      .patch('/api/v1/property/12/sold')
+      .type('form')
+      .set('x-access-token', token)
+      .send({})
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        expect(res.body.status).to.eql('error');
+        done();
+      });
+  });
 });
 
 describe('Users', () => {
