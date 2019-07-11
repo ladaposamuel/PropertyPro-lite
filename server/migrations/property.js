@@ -41,12 +41,12 @@ const createPropertyTable = () => {
 
   pool
     .query(queryText)
-    .then((res) => {
-      console.log('Property table created successfully: ', res);
+    .then(() => {
+      console.log('Property table created successfully: ');
       pool.end();
     })
-    .catch((err) => {
-      console.log('Could not create property table', err);
+    .catch(() => {
+      console.log('Could not create property table');
       pool.end();
     });
 };
@@ -58,12 +58,12 @@ const dropPropertyTable = () => {
   const queryText = 'DROP TABLE IF EXISTS property';
   pool
     .query(queryText)
-    .then((res) => {
-      console.log('Dropped property table', res);
+    .then(() => {
+      console.log('Dropped property table');
       pool.end();
     })
-    .catch((err) => {
-      console.log('Could not drop property table', err);
+    .catch(() => {
+      console.log('Could not drop property table');
       pool.end();
     });
 };
