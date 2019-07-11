@@ -10,6 +10,7 @@ import userHelper from '../helpers/userHelper';
 const path = require('path');
 
 let token;
+let Usertoken;
 chai.use(chaiHttp);
 const { expect } = chai;
 
@@ -18,6 +19,8 @@ before(async () => {
   await db.query('DROP TABLE IF EXISTS flag CASCADE');
 });
 before(async () => {
+  const { user } = userData;
+
   await db.query(
     `CREATE TABLE property (
       id serial PRIMARY KEY,
@@ -58,6 +61,23 @@ before(async () => {
     new Date().toDateString(),
     new Date().toDateString(),
   ];
+
+  const createUserQuery = `INSERT INTO
+  users (first_name , last_name, email, phone_number, address, password, is_agent, created_date, modified_date)
+  VALUES ($1, $2, $3, $4, $5, $6 ,$7, $8 , $9)
+  returning *`;
+  const userValues = [
+    user.demoUser3.first_name,
+    user.demoUser3.last_name,
+    user.demoUser3.email,
+    user.demoUser3.phone_number,
+    user.demoUser3.address,
+    user.demoUser3.password,
+    user.demoUser3.is_agent,
+    new Date().toDateString(),
+    new Date().toDateString(),
+  ];
+  await db.query(createUserQuery, userValues);
   await db.query(creatQuery, values);
 });
 describe('Agents', () => {
@@ -65,6 +85,7 @@ describe('Agents', () => {
   const { property } = propertyData;
   before(() => {
     token = userHelper.generateToken(user.demoUser);
+    Usertoken = userHelper.generateToken(user.demoUser3);
   });
 
   it('should be logged in to access routes', (done) => {
@@ -77,6 +98,19 @@ describe('Agents', () => {
         expect(res.status).to.eql(401);
         expect(res.body.status).to.eql('error');
         expect(res.body.error).to.eql('Access denied. No token provided.');
+        done();
+      });
+  });
+  it('should be allowed to access agent routes', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/property/')
+      .set('x-access-token', Usertoken)
+      .send({})
+      .end((err, res) => {
+        expect(res.status).to.eql(403);
+        expect(res.body.status).to.eql('error');
+        expect(res.body.error).to.eql('Access denied. Only Agents can access this route');
         done();
       });
   });

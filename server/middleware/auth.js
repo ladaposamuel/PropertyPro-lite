@@ -36,7 +36,7 @@ const Auth = {
   agent(req, res, next) {
     if (req.user.is_agent === 0) {
       return res.status(403).json({
-        status: 403,
+        status: 'error',
         error: 'Access denied. Only Agents can access this route',
       });
     }
