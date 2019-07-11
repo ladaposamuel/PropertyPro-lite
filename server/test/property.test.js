@@ -34,6 +34,22 @@ before((done) => {
 )`,
     () => done(),
   );
+  const creatQuery = `INSERT INTO 
+            property (agent_id, price , status, state, city, address, type, image_url, created_on,updated_on) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7 ,$8, $9, $10) RETURNING *`;
+  const values = [
+    1,
+    300000,
+    'available',
+    'Lagos',
+    'Lagos',
+    '12 world street',
+    'Flat',
+    'http://image.url/file.jpg',
+    new Date().toDateString(),
+    new Date().toDateString(),
+  ];
+  db.query(creatQuery, values);
 });
 describe('Agents', () => {
   const { user } = userData;
@@ -42,6 +58,19 @@ describe('Agents', () => {
     token = userHelper.generateToken(user.demoUser);
   });
 
+  it('should be logged in to access routes', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/property/')
+      .set('x-access-token', '')
+      .send({})
+      .end((err, res) => {
+        expect(res.status).to.eql(401);
+        expect(res.body.status).to.eql('error');
+        expect(res.body.error).to.eql('Access denied. No token provided.');
+        done();
+      });
+  });
   it('should be able to post properties', async () => {
     const res = await chai
       .request(server)
@@ -219,13 +248,38 @@ describe('Agents', () => {
         done();
       });
   });
+  it('should be able to delete a property', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/property/1')
+      .set('x-access-token', token)
+      .send({})
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body.data.message).to.eql('Property Deleted successfully');
+        done();
+      });
+  });
+  it('should be not be able to delete an unavailable property', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/property/12')
+      .set('x-access-token', token)
+      .send({})
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        expect(res.body.status).to.eql('error');
+        done();
+      });
+  });
 });
 
 describe('Users', () => {
   it('should be able to view a property', (done) => {
     chai
       .request(server)
-      .get('/api/v1/property/1')
+      .get('/api/v1/property/2')
       .end((err, res) => {
         expect(res.status).to.eql(200);
         expect(res.body.status).to.eql('success');
