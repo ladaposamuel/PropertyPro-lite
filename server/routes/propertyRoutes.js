@@ -147,7 +147,7 @@ const router = express.Router();
 router.get('/property/', PropertyController.viewPropertyAll);
 router.patch('/property/:id/', PropertyController.updateProperty);
 router.get('/property/:id', PropertyController.viewProperty);
-router.patch('/property/:id/sold', PropertyController.soldProperty);
+router.patch('/property/:id/sold', [Auth.verifyToken, Auth.agent], PropertyController.soldProperty);
 router.delete('/property/:id', PropertyController.deleteProperty);
 router.post(
   '/property/flag/:id',
