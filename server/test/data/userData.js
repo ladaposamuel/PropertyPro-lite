@@ -49,41 +49,5 @@ export default {
       created_date: '2019-07-09T23:00:00.000Z',
       modified_date: '2019-07-09T23:00:00.000Z',
     },
-    demoUser3: {
-      username: 'jake',
-      email: 'jake@email.com',
-      phone: '2341245234567',
-      password: 'password',
-    },
-    demoUser4: {
-      username: 'jake',
-      email: '',
-      phone: '2341245234567',
-      password: 'password',
-    },
-    demoUser5: {
-      username: null,
-      email: 'jake@email.com',
-      phone: '2341245234567',
-      password: 'password',
-    },
-    demoUser6: {
-      username: 'jake',
-      email: 'jake@email.com',
-      phone: '',
-      password: 'password',
-    },
-    demoUser7: {
-      username: 'jake',
-      email: 'jake@email.com',
-      phone: '2343454545454',
-      password: '',
-    },
-    demoUser8: {
-      id: 3,
-      username: 'user3',
-      email: 'user3@gmail.com',
-      phone: '2348012345670',
-    },
   },
 };
