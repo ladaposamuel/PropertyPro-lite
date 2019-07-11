@@ -5,6 +5,5 @@ export default {
     city: 'Ibadan',
     address: 'Abule EHba',
     type: 'Flat',
-    agent_id: 1,
   },
 };

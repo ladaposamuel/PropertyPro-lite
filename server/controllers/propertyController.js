@@ -168,25 +168,54 @@ const PropertyController = {
    * @return {object} returns an object containing the details of the property
    */
   async updateProperty(req, res) {
-    let { id } = req.params;
+    const { id } = req.params;
+    const { user } = req;
+    let imageUrl;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        status: 'error',
+        error: errors.array()[0].msg,
+      });
+    }
     try {
-      id = parseInt(id, 10);
-      const query = 'UPDATE property set status = $1 where id = $2 and agent_id = $3';
-      const { rows } = await db.query(query, ['sold', id, req.user.id]);
-      if (!rows[0]) {
-        return res.status(404).send({
-          status: 'error',
-          error: 'No Property found with such ID',
+      if (req.file) {
+        const file = dataUri(req).content;
+        const imageFile = await uploader.upload(file, result => result.secure_url);
+        imageUrl = imageFile.secure_url;
+      }
+      const checkQuery = 'SELECT * FROM property where id = $1 and agent_id = $2';
+      const updateQuery = `UPDATE property set agent_id = $1, price = $2 , status = $3, state = $4, city = $5, address = $6, type = $7 , image_url =$8
+      ,updated_on = $9 where id = $10 and agent_id = $1 RETURNING *`;
+      const { rows } = await db.query(checkQuery, [id, req.user.id]);
+      if (rows[0]) {
+        const values = [
+          user.id,
+          req.body.price || rows[0].price,
+          req.body.status || rows[0].status,
+          req.body.state || rows[0].state,
+          req.body.city || rows[0].city,
+          req.body.address || rows[0].address,
+          req.body.type || rows[0].type,
+          imageUrl || rows[0].image_url,
+          new Date().toDateString(),
+          id,
+        ];
+        const updatedProperty = await db.query(updateQuery, values);
+        const property = updatedProperty.rows[0];
+        return res.status(200).send({
+          status: 'success',
+          data: property,
         });
       }
-      return res.send({
-        status: 'success',
-        data: rows[0],
+      return res.status(404).send({
+        status: 'error',
+        error: 'Property not found!',
       });
-    } catch (e) {
+    } catch (error) {
       return res.status(400).send({
         status: 'error',
-        data: 'Could not update property as sold, please try again',
+        error: `Could not update property, Please try again ${error}`,
       });
     }
   },
