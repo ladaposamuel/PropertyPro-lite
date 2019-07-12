@@ -346,7 +346,7 @@ describe('Users', () => {
         done();
       });
   });
-  it('should see an error if a specific property is not found', (done) => {
+  it('should return 404 if specific property is not found', (done) => {
     chai
       .request(server)
       .get('/api/v1/property/29')

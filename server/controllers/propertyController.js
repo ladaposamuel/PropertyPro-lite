@@ -20,7 +20,11 @@ const PropertyController = {
   async viewProperty(req, res) {
     const { id } = req.params;
     try {
-      const query = 'SELECT * FROM property where id = $1';
+      const query = `SELECT P.* , U.email as "ownerEmail" , U.phone_number as "ownerPhoneNumber"
+      FROM property P
+      INNER JOIN users U ON U.id = P.owner
+      WHERE P.id = $1
+      `;
       const { rows } = await db.query(query, [id]);
       if (!rows[0]) {
         return res.status(400).send({
@@ -51,11 +55,18 @@ const PropertyController = {
     try {
       const propertyType = req.query.type;
       if (propertyType) {
-        query = 'SELECT * FROM property where type = $1';
+        query = `SELECT P.*, U.email as "ownerEmail" , U.phone_number as "ownerPhoneNumber"
+        FROM property P
+        INNER JOIN users U ON U.id = P.owner
+        WHERE P.type = $1
+        `;
         const { rows } = await db.query(query, [propertyType]);
         properties = rows;
       } else {
-        query = 'SELECT * FROM property';
+        query = `SELECT P.*, U.email as "ownerEmail" , U.phone_number as "ownerPhoneNumber"
+        FROM property P
+        INNER JOIN users U ON U.id = P.owner
+        `;
         const { rows } = await db.query(query);
         properties = rows;
       }

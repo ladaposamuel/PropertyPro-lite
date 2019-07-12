@@ -27,10 +27,10 @@ const createFlagTable = () => {
   const queryText = `CREATE TABLE IF NOT EXISTS
   flag(
       id serial PRIMARY KEY,
-      property_id Integer NOT NULL,
+      property_id INT REFERENCES property(id) ON DELETE CASCADE,
       reason TEXT NOT NULL,
       description TEXT NOT NULL,
-      reporter Integer NOT NULL,
+      reporter INT REFERENCES users(id) ON DELETE CASCADE,
       created_on TIMESTAMP NOT NULL
       )`;
 
