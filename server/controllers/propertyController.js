@@ -95,7 +95,7 @@ const PropertyController = {
       const imageFile = await uploader.upload(file, result => result.secure_url);
       const imageUrl = imageFile.secure_url;
       const creatQuery = `INSERT INTO 
-            property (agent_id, price , status, state, city, address, type, image_url, created_on,updated_on) 
+            property (owner, price , status, state, city, address, type, image_url, created_on,updated_on) 
             VALUES ($1, $2, $3, $4, $5, $6, $7 ,$8, $9, $10) RETURNING *`;
       const values = [
         user.id,
@@ -131,7 +131,7 @@ const PropertyController = {
   async deleteProperty(req, res) {
     const { id } = req.params;
     try {
-      const queryText = 'DELETE from property where id = $1 and agent_id = $2 RETURNING *';
+      const queryText = 'DELETE from property where id = $1 and owner = $2 RETURNING *';
       const rows = await db.query(queryText, [id, req.user.id]);
       if (!rows.rowCount) {
         return res.status(404).send({
@@ -162,7 +162,7 @@ const PropertyController = {
     try {
       let { id } = req.params;
       id = parseInt(id, 10);
-      const query = 'UPDATE property set status = $1 where id = $2 and agent_id = $3 RETURNING *';
+      const query = 'UPDATE property set status = $1 where id = $2 and owner = $3 RETURNING *';
       const { rows } = await db.query(query, ['sold', id, req.user.id]);
       if (!rows[0]) {
         return res.status(404).send({
@@ -204,9 +204,9 @@ const PropertyController = {
         const imageFile = await uploader.upload(file, result => result.secure_url);
         imageUrl = imageFile.secure_url;
       }
-      const checkQuery = 'SELECT * FROM property where id = $1 and agent_id = $2';
-      const updateQuery = `UPDATE property set agent_id = $1, price = $2 , status = $3, state = $4, city = $5, address = $6, type = $7 , image_url =$8
-      ,updated_on = $9 where id = $10 and agent_id = $1 RETURNING *`;
+      const checkQuery = 'SELECT * FROM property where id = $1 and owner = $2';
+      const updateQuery = `UPDATE property set owner = $1, price = $2 , status = $3, state = $4, city = $5, address = $6, type = $7 , image_url =$8
+      ,updated_on = $9 where id = $10 and owner = $1 RETURNING *`;
       const { rows } = await db.query(checkQuery, [id, req.user.id]);
       if (rows[0]) {
         const values = [

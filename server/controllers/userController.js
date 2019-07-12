@@ -29,7 +29,7 @@ const UserController = {
     }
     const hashPassword = userHelper.hashPassword(password);
     const createQuery = `INSERT INTO
-    users (first_name , last_name, email, phone_number, address, password, is_agent, created_date, modified_date)
+    users (first_name , last_name, email, phone_number, address, password, is_admin, created_date, modified_date)
     VALUES ($1, $2, $3, $4, $5, $6 ,$7, $8 , $9)
     returning *`;
     const values = [

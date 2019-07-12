@@ -27,7 +27,7 @@ const createPropertyTable = () => {
   const queryText = `CREATE TABLE IF NOT EXISTS
   property(
       id serial PRIMARY KEY,
-      agent_id Integer NOT NULL,
+      owner Integer NOT NULL,
       status TEXT NOT NULL,
       state TEXT NOT NULL,
       city TEXT NOT NULL,

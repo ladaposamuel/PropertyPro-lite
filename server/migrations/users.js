@@ -34,7 +34,6 @@ const createUserTable = () => {
         phone_number VARCHAR(128) NOT NULL,
         address VARCHAR(128)  NULL,
         is_admin SMALLINT DEFAULT 0,
-        is_agent SMALLINT DEFAULT 0,
         created_date TIMESTAMP,
         modified_date TIMESTAMP
       )`;

@@ -23,7 +23,7 @@ const router = express.Router();
  *         type: string
  *       is_Admin:
  *         type: boolean
- *       is_Agent:
+ *       is_admin:
  *         type: boolean
  */
 
