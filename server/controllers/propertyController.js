@@ -188,8 +188,6 @@ const PropertyController = {
    * @return {object} returns an object containing the details of the property
    */
   async updateProperty(req, res) {
-    const { id } = req.params;
-    const { user } = req;
     let imageUrl;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -207,10 +205,10 @@ const PropertyController = {
       const checkQuery = 'SELECT * FROM property where id = $1 and owner = $2';
       const updateQuery = `UPDATE property set owner = $1, price = $2 , status = $3, state = $4, city = $5, address = $6, type = $7 , image_url =$8
       ,updated_on = $9 where id = $10 and owner = $1 RETURNING *`;
-      const { rows } = await db.query(checkQuery, [id, req.user.id]);
+      const { rows } = await db.query(checkQuery, [req.params.id, req.user.id]);
       if (rows[0]) {
         const values = [
-          user.id,
+          req.user.id,
           req.body.price || rows[0].price,
           req.body.status || rows[0].status,
           req.body.state || rows[0].state,
@@ -219,7 +217,7 @@ const PropertyController = {
           req.body.type || rows[0].type,
           imageUrl || rows[0].image_url,
           new Date().toDateString(),
-          id,
+          req.params.id,
         ];
         const updatedProperty = await db.query(updateQuery, values);
         const property = updatedProperty.rows[0];
