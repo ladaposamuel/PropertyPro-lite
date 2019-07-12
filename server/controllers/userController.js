@@ -78,12 +78,12 @@ const UserController = {
     try {
       const { rows } = await db.query(text, [email]);
       if (!rows[0]) {
-        response = res
+        return res
           .status(400)
           .send({ status: 'error', error: 'The credentials you provided is incorrect' });
       }
       if (!userHelper.comparePassword(rows[0].password, password)) {
-        response = res
+        return res
           .status(400)
           .send({ status: 'error', error: 'The credentials you provided is incorrect' });
       }
@@ -94,7 +94,7 @@ const UserController = {
         data: rows[0],
       });
     } catch (error) {
-      response = res.status(422).send({
+      return res.status(422).send({
         status: 'error',
         error: 'User could not be signed in, Please try again.',
       });
