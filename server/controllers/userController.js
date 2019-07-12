@@ -73,32 +73,33 @@ const UserController = {
         error: errors.array()[0].msg,
       });
     }
-
+    let response;
     const text = 'SELECT * FROM users WHERE email = $1';
     try {
       const { rows } = await db.query(text, [email]);
       if (!rows[0]) {
-        return res
+        response = res
           .status(400)
           .send({ status: 'error', error: 'The credentials you provided is incorrect' });
       }
       if (!userHelper.comparePassword(rows[0].password, password)) {
-        return res
+        response = res
           .status(400)
           .send({ status: 'error', error: 'The credentials you provided is incorrect' });
       }
       const token = userHelper.generateToken(rows[0]);
       rows[0].token = token;
-      return res.status(200).send({
+      response = res.status(200).send({
         status: 'success',
         data: rows[0],
       });
     } catch (error) {
-      return res.status(422).send({
+      response = res.status(422).send({
         status: 'error',
         error: 'User could not be signed in, Please try again.',
       });
     }
+    return response;
   },
   async resetPassword(req, res) {
     const { email } = req.params;
