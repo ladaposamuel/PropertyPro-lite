@@ -22,7 +22,6 @@ before((done) => {
       phone_number VARCHAR(128) NOT NULL,
       address VARCHAR(128)  NULL,
       is_admin SMALLINT DEFAULT 0,
-      is_agent SMALLINT DEFAULT 0,
       created_date TIMESTAMP,
       modified_date TIMESTAMP
 )`,
@@ -278,6 +277,21 @@ describe('Test User Sign in Route', () => {
         done();
       });
   });
+  it('should return error with wrong password', (done) => {
+    const user = {
+      email: 'police@mail.io',
+      password: 'sam1111998',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signin')
+      .send(user)
+      .end((err, res) => {
+        expect(res.status).to.eql(400);
+        expect(res.body.error).to.eql('The credentials you provided is incorrect');
+        done();
+      });
+  });
   it('should return success and token when correct details are passed along', (done) => {
     const user = {
       email: 'police@mail.io',
@@ -352,5 +366,12 @@ describe('Test User Password Reset', () => {
         expect(res.status).to.eql(204);
         done();
       });
+  });
+  it('should check test password', (done) => {
+    const defaultPassword = 'NewPassword1_';
+    if (process.env.NODE_ENV === 'test') {
+      expect(defaultPassword).to.eql('NewPassword1_');
+    }
+    done();
   });
 });

@@ -24,7 +24,7 @@ before(async () => {
   await db.query(
     `CREATE TABLE property (
       id serial PRIMARY KEY,
-      agent_id Integer NOT NULL,
+      owner Integer NOT NULL,
       status TEXT NOT NULL,
       state TEXT NOT NULL,
       city TEXT NOT NULL,
@@ -47,7 +47,7 @@ before(async () => {
 )`,
   );
   const creatQuery = `INSERT INTO 
-            property (agent_id, price , status, state, city, address, type, image_url, created_on,updated_on) 
+            property (owner, price , status, state, city, address, type, image_url, created_on,updated_on) 
             VALUES ($1, $2, $3, $4, $5, $6, $7 ,$8, $9, $10) RETURNING *`;
   const values = [
     1,
@@ -63,7 +63,7 @@ before(async () => {
   ];
 
   const createUserQuery = `INSERT INTO
-  users (first_name , last_name, email, phone_number, address, password, is_agent, created_date, modified_date)
+  users (first_name , last_name, email, phone_number, address, password, is_admin, created_date, modified_date)
   VALUES ($1, $2, $3, $4, $5, $6 ,$7, $8 , $9)
   returning *`;
   const userValues = [
@@ -73,7 +73,7 @@ before(async () => {
     user.demoUser3.phone_number,
     user.demoUser3.address,
     user.demoUser3.password,
-    user.demoUser3.is_agent,
+    user.demoUser3.is_admin,
     new Date().toDateString(),
     new Date().toDateString(),
   ];
@@ -125,7 +125,7 @@ describe('Agents', () => {
       .attach('image', path.join(__dirname, '../test/data/test.png'), 'test.png');
     expect(res.status).to.eql(201);
     expect(res.body.status).to.eql('success');
-    expect(res.body.data).to.have.property('agent_id');
+    expect(res.body.data).to.have.property('owner');
     expect(res.body.data).to.have.property('price');
     expect(res.body.data)
       .to.have.property('state')
@@ -262,7 +262,7 @@ describe('Agents', () => {
       .attach('image', path.join(__dirname, '../test/data/test.png'), 'test.png');
     expect(res.status).to.eql(200);
     expect(res.body.status).to.eql('success');
-    expect(res.body.data).to.have.property('agent_id');
+    expect(res.body.data).to.have.property('owner');
     expect(res.body.data).to.have.property('price');
     expect(res.body.data)
       .to.have.property('state')
@@ -346,7 +346,7 @@ describe('Users', () => {
         done();
       });
   });
-  it('should see an error if a specific property is not found', (done) => {
+  it('should return 404 if specific property is not found', (done) => {
     chai
       .request(server)
       .get('/api/v1/property/29')

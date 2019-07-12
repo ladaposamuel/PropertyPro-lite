@@ -20,7 +20,11 @@ const PropertyController = {
   async viewProperty(req, res) {
     const { id } = req.params;
     try {
-      const query = 'SELECT * FROM property where id = $1';
+      const query = `SELECT P.* , U.email as "ownerEmail" , U.phone_number as "ownerPhoneNumber"
+      FROM property P
+      INNER JOIN users U ON U.id = P.owner
+      WHERE P.id = $1
+      `;
       const { rows } = await db.query(query, [id]);
       if (!rows[0]) {
         return res.status(400).send({
@@ -51,11 +55,18 @@ const PropertyController = {
     try {
       const propertyType = req.query.type;
       if (propertyType) {
-        query = 'SELECT * FROM property where type = $1';
+        query = `SELECT P.*, U.email as "ownerEmail" , U.phone_number as "ownerPhoneNumber"
+        FROM property P
+        INNER JOIN users U ON U.id = P.owner
+        WHERE P.type = $1
+        `;
         const { rows } = await db.query(query, [propertyType]);
         properties = rows;
       } else {
-        query = 'SELECT * FROM property';
+        query = `SELECT P.*, U.email as "ownerEmail" , U.phone_number as "ownerPhoneNumber"
+        FROM property P
+        INNER JOIN users U ON U.id = P.owner
+        `;
         const { rows } = await db.query(query);
         properties = rows;
       }
@@ -95,7 +106,7 @@ const PropertyController = {
       const imageFile = await uploader.upload(file, result => result.secure_url);
       const imageUrl = imageFile.secure_url;
       const creatQuery = `INSERT INTO 
-            property (agent_id, price , status, state, city, address, type, image_url, created_on,updated_on) 
+            property (owner, price , status, state, city, address, type, image_url, created_on,updated_on) 
             VALUES ($1, $2, $3, $4, $5, $6, $7 ,$8, $9, $10) RETURNING *`;
       const values = [
         user.id,
@@ -131,7 +142,7 @@ const PropertyController = {
   async deleteProperty(req, res) {
     const { id } = req.params;
     try {
-      const queryText = 'DELETE from property where id = $1 and agent_id = $2 RETURNING *';
+      const queryText = 'DELETE from property where id = $1 and owner = $2 RETURNING *';
       const rows = await db.query(queryText, [id, req.user.id]);
       if (!rows.rowCount) {
         return res.status(404).send({
@@ -162,7 +173,7 @@ const PropertyController = {
     try {
       let { id } = req.params;
       id = parseInt(id, 10);
-      const query = 'UPDATE property set status = $1 where id = $2 and agent_id = $3 RETURNING *';
+      const query = 'UPDATE property set status = $1 where id = $2 and owner = $3 RETURNING *';
       const { rows } = await db.query(query, ['sold', id, req.user.id]);
       if (!rows[0]) {
         return res.status(404).send({
@@ -188,8 +199,6 @@ const PropertyController = {
    * @return {object} returns an object containing the details of the property
    */
   async updateProperty(req, res) {
-    const { id } = req.params;
-    const { user } = req;
     let imageUrl;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -204,13 +213,13 @@ const PropertyController = {
         const imageFile = await uploader.upload(file, result => result.secure_url);
         imageUrl = imageFile.secure_url;
       }
-      const checkQuery = 'SELECT * FROM property where id = $1 and agent_id = $2';
-      const updateQuery = `UPDATE property set agent_id = $1, price = $2 , status = $3, state = $4, city = $5, address = $6, type = $7 , image_url =$8
-      ,updated_on = $9 where id = $10 and agent_id = $1 RETURNING *`;
-      const { rows } = await db.query(checkQuery, [id, req.user.id]);
+      const checkQuery = 'SELECT * FROM property where id = $1 and owner = $2';
+      const updateQuery = `UPDATE property set owner = $1, price = $2 , status = $3, state = $4, city = $5, address = $6, type = $7 , image_url =$8
+      ,updated_on = $9 where id = $10 and owner = $1 RETURNING *`;
+      const { rows } = await db.query(checkQuery, [req.params.id, req.user.id]);
       if (rows[0]) {
         const values = [
-          user.id,
+          req.user.id,
           req.body.price || rows[0].price,
           req.body.status || rows[0].status,
           req.body.state || rows[0].state,
@@ -219,7 +228,7 @@ const PropertyController = {
           req.body.type || rows[0].type,
           imageUrl || rows[0].image_url,
           new Date().toDateString(),
-          id,
+          req.params.id,
         ];
         const updatedProperty = await db.query(updateQuery, values);
         const property = updatedProperty.rows[0];
