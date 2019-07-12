@@ -144,7 +144,7 @@ const router = express.Router();
  *         description: Property not found.
  */
 
-router.get('/property/', PropertyController.viewPropertyAll);
+router.get('/property/', Auth.verifyToken, PropertyController.viewPropertyAll);
 router.patch(
   '/property/:id/',
   [
@@ -156,7 +156,7 @@ router.patch(
   ],
   PropertyController.updateProperty,
 );
-router.get('/property/:id', PropertyController.viewProperty);
+router.get('/property/:id', Auth.verifyToken, PropertyController.viewProperty);
 router.patch('/property/:id/sold', [Auth.verifyToken, Auth.agent], PropertyController.soldProperty);
 router.delete('/property/:id', [Auth.verifyToken, Auth.agent], PropertyController.deleteProperty);
 router.post(

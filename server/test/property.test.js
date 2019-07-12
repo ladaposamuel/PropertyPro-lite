@@ -101,7 +101,7 @@ describe('Agents', () => {
         done();
       });
   });
-  it('should be allowed to access agent routes', (done) => {
+  it('should be allowed to access protected routes', (done) => {
     chai
       .request(server)
       .post('/api/v1/property/')
@@ -319,10 +319,15 @@ describe('Agents', () => {
 });
 
 describe('Users', () => {
+  const { user } = userData;
+  before(() => {
+    Usertoken = userHelper.generateToken(user.demoUser3);
+  });
   it('should be able to view a property', (done) => {
     chai
       .request(server)
       .get('/api/v1/property/2')
+      .set('x-access-token', Usertoken)
       .end((err, res) => {
         expect(res.status).to.eql(200);
         expect(res.body.status).to.eql('success');
@@ -333,6 +338,7 @@ describe('Users', () => {
     chai
       .request(server)
       .get('/api/v1/property/?type=Flat')
+      .set('x-access-token', Usertoken)
       .end((err, res) => {
         expect(res.status).to.eql(200);
         expect(res.body.status).to.eql('success');
@@ -344,6 +350,7 @@ describe('Users', () => {
     chai
       .request(server)
       .get('/api/v1/property/29')
+      .set('x-access-token', Usertoken)
       .end((err, res) => {
         expect(res.status).to.eql(400);
         expect(res.body.status).to.eql('error');
@@ -354,6 +361,7 @@ describe('Users', () => {
     chai
       .request(server)
       .get('/api/v1/property')
+      .set('x-access-token', Usertoken)
       .end((err, res) => {
         expect(res.status).to.eql(200);
         expect(res.body.status).to.eql('success');
@@ -379,7 +387,7 @@ describe('Users', () => {
     chai
       .request(server)
       .post('/api/v1/property/2/flag')
-      .set('x-access-token', token)
+      .set('x-access-token', Usertoken)
       .send(flag)
       .end((err, res) => {
         expect(res.status).to.eql(200);
@@ -397,7 +405,7 @@ describe('Users', () => {
     chai
       .request(server)
       .post('/api/v1/property/99/flag')
-      .set('x-access-token', token)
+      .set('x-access-token', Usertoken)
       .send(flag)
       .end((err, res) => {
         expect(res.status).to.eql(404);
@@ -413,7 +421,7 @@ describe('Users', () => {
     chai
       .request(server)
       .post('/api/v1/property/2/flag')
-      .set('x-access-token', token)
+      .set('x-access-token', Usertoken)
       .send(flag)
       .end((err, res) => {
         expect(res.status).to.eql(400);
@@ -429,7 +437,7 @@ describe('Users', () => {
     chai
       .request(server)
       .post('/api/v1/property/2/flag')
-      .set('x-access-token', token)
+      .set('x-access-token', Usertoken)
       .send(flag)
       .end((err, res) => {
         expect(res.status).to.eql(400);
