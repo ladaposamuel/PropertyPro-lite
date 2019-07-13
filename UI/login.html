@@ -1,7 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <script src="./js/jwt-decode.min.js"></script>
+  <script>
+    const token = localStorage.getItem('token');
+    try {
+      const decoded = jwt_decode(token);
+      const expiryTime = new Date(decoded.exp * 1000).getTime();
+      if (new Date().getTime() > expiryTime) {} else {
+        alert('You\'re already loggedin');
+        window.location.replace('./landing_page.html');
+      }
+    } catch (e) {}
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -16,11 +27,10 @@
         <h1>Property Pro Lite</h1>
       </div>
       <nav class="topnav" id="myTopnav">
-        <a href="index.html" >Home</a>
-        <a href="post_ad.html">Post a Property</a>
+        <a href="index.html">Home</a>
         <a href="signup.html">Create an Account</a>
         <a href="login.html" class="active">Login</a>
-        <a href="javascript:void(0);" class="icon" onclick="mobileMenu()">
+        <a href="#." class="icon">
           <i class="fa fa-bars"></i>
         </a>
       </nav>
@@ -36,11 +46,13 @@
   <section id="signup-form" class="mt-40">
     <div class="container">
       <div class="form">
-        <form action="" class="forms">
-          <input type="email" placeholder="Email">
-          <input type="password" placeholder="Password">
+        <div class="alert">
 
-          <button class="button-global">Submit</button>
+        </div>
+        <form action="" class="forms">
+          <input type="email" placeholder="Email" class="email-field">
+          <input type="password" placeholder="Password" class="password-field">
+          <button class="button-global login-btn">Submit</button>
         </form>
         <hr>
         <a href="signup.html" class="btn-link">- Create a new Account</a>
@@ -50,6 +62,7 @@
     </div>
   </section>
   <script src="./js/main.js"></script>
+  <script src="./js/login.js"></script>
 </body>
 
 </html>
