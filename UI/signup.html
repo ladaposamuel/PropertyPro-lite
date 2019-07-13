@@ -16,8 +16,7 @@
         <h1>Property Pro Lite</h1>
       </div>
       <nav class="topnav" id="myTopnav">
-        <a href="index.html" >Home</a>
-        <a href="post_ad.html">Post a Property</a>
+        <a href="index.html">Home</a>
         <a href="signup.html" class="active">Create an Account</a>
         <a href="login.html">Login</a>
         <a href="javascript:void(0);" class="icon" onclick="mobileMenu()">
@@ -36,17 +35,19 @@
   <section id="signup-form" class="mt-40">
     <div class="container">
       <div class="form">
+        <div class="alert">
+        </div>
         <form action="" class="register-form forms">
-          <input type="text" placeholder="Firstname" class="form-txt-sm">
-          <input type="text" placeholder="Lastname" class="form-txt-sm">
-          <input type="email" placeholder="Email">
-          <input type="password" placeholder="Password">
-          <input type="text" placeholder="Phone Number">
-          <textarea placeholder="Address" rows="4"></textarea>
+          <input type="text" placeholder="Firstname" class="form-txt-sm firstname-field">
+          <input type="text" placeholder="Lastname" class="form-txt-sm lastname-field">
+          <input type="email" placeholder="Email" class="email-field">
+          <input type="password" placeholder="Password" class="password-field">
+          <input type="text" placeholder="Phone Number" class="phone-field">
+          <textarea placeholder="Address" rows="4" class="address-field"></textarea>
           <div class="checkboxes">
             <label for="agent"> <input type="checkbox" name="" id="agent"><span>I'm an Agent </span> </label>
           </div>
-          <button class="button-global">Submit</button>
+          <button class="button-global register-btn">Submit</button>
         </form>
         <hr>
         <a href="login.html" class="btn-link">Already have an account? Login</a>
@@ -54,6 +55,7 @@
     </div>
   </section>
   <script src="./js/main.js"></script>
+  <script src="./js/signup.js"></script>
 </body>
 
 </html>

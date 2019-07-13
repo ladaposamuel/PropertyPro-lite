@@ -13,8 +13,9 @@
         try {
             const decoded = jwt_decode(token);
             const expiryTime = new Date(decoded.exp * 1000).getTime();
+            console.log("TCL: expiryTime", new Date().getTime())
             if (new Date().getTime() > expiryTime) {} else {
-                recentPosts.style.display = 'block';
+                window.location.replace('./login.html');
             }
         } catch (e) {}
     </script>
