@@ -11,7 +11,7 @@ class userHelper {
   }
 
   static generateToken(user) {
-    const token = jwt.sign(user, process.env.SECRET, { expiresIn: '7d' });
+    const token = jwt.sign(user, process.env.SECRET, { expiresIn: '1h' });
     return token;
   }
 
