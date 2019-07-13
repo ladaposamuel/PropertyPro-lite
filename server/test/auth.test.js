@@ -279,7 +279,7 @@ describe('Test User Sign in Route', () => {
   });
   it('should return error with wrong password', (done) => {
     const user = {
-      email: 'police@mail.io',
+      email: 'd@mail.io',
       password: 'sam1111998',
     };
     chai
@@ -371,7 +371,7 @@ describe('Test User Password Reset', () => {
     const defaultPassword = 'NewPassword1_';
     if (process.env.NODE_ENV === 'test') {
       expect(defaultPassword).to.eql('NewPassword1_');
+      done();
     }
-    done();
   });
 });
