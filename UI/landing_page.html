@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./styles/style.css">
+    <title>Property Pro Lite</title>
+    <script src="./js/jwt-decode.min.js"></script>
+    <script>
+        const token = localStorage.getItem('token');
+        try {
+            const decoded = jwt_decode(token);
+            const expiryTime = new Date(decoded.exp * 1000).getTime();
+            if (new Date().getTime() > expiryTime) {} else {
+                recentPosts.style.display = 'block';
+            }
+        } catch (e) {}
+    </script>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <div id="logo">
+                <h1>Property Pro Lite</h1>
+            </div>
+            <nav class="topnav" id="myTopnav">
+                <a href="index.html" class="active">Home</a>
+                <a href="signup.html">Create an Account</a>
+                <a href="login.html">Login</a>
+                <a href="#." class="icon">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <section id="showcase">
+        <div class="container">
+            <h1>
+                Rent or Own <br /> a Property
+            </h1>
+            <div class="search-form">
+                <select name="" id="" class="form-global option-field">
+                    <option value="">For Rent</option>
+                </select>
+                <select name="" class="form-global option-field">
+                    <option value="">Lagos</option>
+                </select>
+
+                <select name="" class="form-global option-field">
+                    <option value="">2 Bedrooom</option>
+                    <option value="">3 Bedrooom</option>
+
+                </select>
+                <button class="button-global search">Search</button>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="recent-posts" class="mt-40">
+        <div class="container">
+            <h1 class="title ">
+                Recent Property Adverts
+            </h1>
+            <div class="advert-card">
+                <img src="./images/house.jpg" alt="">
+                <div class="price">NGN 50,000.00</div>
+                <div class="advert-card-body">
+                    <div class="title">Fela Plaza</div>
+                    <div class="type"> 4 Bedroom Flats</div>
+                    <hr>
+                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
+                        Yaba, Lagos
+                    </div>
+                </div>
+                <div class="advert-card-footer">
+                    <button class="button-global advert-card-btn" onclick="viewProperty()">
+                        View property
+                    </button>
+                </div>
+            </div>
+            <div class="advert-card">
+                <img src="./images/house.jpg" alt="">
+                <div class="price">NGN 50,000.00</div>
+                <div class="advert-card-body">
+                    <div class="title">Fela Plaza</div>
+                    <div class="type"> 4 Bedroom Flats</div>
+                    <hr>
+                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
+                        Yaba, Lagos
+                    </div>
+                </div>
+                <div class="advert-card-footer">
+                    <button class="button-global advert-card-btn" onclick="viewProperty()">
+                        View property
+                    </button>
+                </div>
+            </div>
+            <div class="advert-card">
+                <img src="./images/house.jpg" alt="">
+                <div class="price">NGN 50,000.00</div>
+                <div class="advert-card-body">
+                    <div class="title">Fela Plaza</div>
+                    <div class="type"> 4 Bedroom Flats</div>
+                    <hr>
+                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
+                        Yaba, Lagos
+                    </div>
+                </div>
+                <div class="advert-card-footer">
+                    <button class="button-global advert-card-btn" onclick="viewProperty()">
+                        View property
+                    </button>
+                </div>
+            </div>
+            <div class="advert-card">
+                <img src="./images/house.jpg" alt="">
+                <div class="price">NGN 50,000.00</div>
+                <div class="advert-card-body">
+                    <div class="title">Fela Plaza</div>
+                    <div class="type"> 4 Bedroom Flats</div>
+                    <hr>
+                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
+                        Yaba, Lagos
+                    </div>
+                </div>
+                <div class="advert-card-footer">
+                    <button class="button-global advert-card-btn" onclick="viewProperty()">
+                        View property
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about-texts">
+        <div class="container">
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima perspiciatis illo nisi, officia,
+                dolorem ut molestias tempore atque,
+                obcaecati recusandae impedit tenetur vero officiis. Soluta laudantium sequi non ipsum quo!
+            </p>
+        </div>
+    </section>
+    <section id="intro-texts">
+        <div class="container">
+            <div class="expore-texts">
+                <h2>I want to Rent or Buy properties</h2>
+                <a href="./lists.html" class="button-global btn-primary">Explore</a>
+            </div>
+            <div class="agents-texts">
+                <h2>I want to post properties adverts</h2>
+                <a href="agent_ads.html" class="button-global btn-primary">Become an Agent</a>
+            </div>
+        </div>
+    </section>
+
+    <script src="./js/main.js"></script>
+    <script src="./js/index.js"></script>
+    <footer>
+        <p> &copy PropertyPro-lite - 2019</p>
+    </footer>
+</body>
+
+</html>
