@@ -9,7 +9,7 @@ const mobileMenu = () => {
 };
 
 const viewProperty = () => {
+  location.href = './view_ad.html';
+};
 
-  location.replace('view_ad.html');
-
-}
+navbar.addEventListener('click', mobileMenu);
