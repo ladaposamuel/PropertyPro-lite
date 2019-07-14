@@ -17,14 +17,12 @@
                 <h1>Property Pro Lite</h1>
             </div>
             <nav class="topnav" id="myTopnav">
-                <a href="index.html" >Home</a>
-                <a href="post_ad.html">Post a Property</a>
-                <a href="signup.html">Create an Account</a>
-                <a href="login.html">Login</a>
+                <a href="landing_page.html" class="active">Home</a>
+                <a href="#." id="logoutBtn">Logout</a>
                 <a href="javascript:void(0);" class="icon" onclick="mobileMenu()">
-                  <i class="fa fa-bars"></i>
+                    <i class="fa fa-bars"></i>
                 </a>
-              </nav>
+            </nav>
         </div>
     </header>
 
@@ -53,149 +51,20 @@
     </section>
 
     <section id="recent-posts" class="mt-40">
-        <div class="container">
+        <div class="container" id="adverts">
             <h1 class="title ">
                 Properties
             </h1>
-            <div class="advert-card">
-                <img src="./images/house.jpg" alt="">
-                <div class="price">NGN 50,000.00</div>
-                <div class="advert-card-body">
-                    <div class="title">Fela Plaza</div>
-                    <div class="type"> 4 Bedroom Flats</div>
-                    <hr>
-                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
-                        Yaba, Lagos
-                    </div>
-                </div>
-                <div class="advert-card-footer">
-                    <button class="button-global advert-card-btn"  onclick="viewProperty()">
-                        View property
-                    </button>
-                </div>
+            <div class="loader">
+                <img src="./images/loader.gif" alt="">
             </div>
-            <div class="advert-card">
-                <img src="./images/house.jpg" alt="">
-                <div class="price">NGN 50,000.00</div>
-                <div class="advert-card-body">
-                    <div class="title">Fela Plaza</div>
-                    <div class="type"> 4 Bedroom Flats</div>
-                    <hr>
-                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
-                        Yaba, Lagos
-                    </div>
-                </div>
-                <div class="advert-card-footer">
-                    <button class="button-global advert-card-btn"  onclick="viewProperty()">
-                        View property
-                    </button>
-                </div>
+            <div class="alert">
             </div>
-            <div class="advert-card">
-                <img src="./images/house.jpg" alt="">
-                <div class="price">NGN 50,000.00</div>
-                <div class="advert-card-body">
-                    <div class="title">Fela Plaza</div>
-                    <div class="type"> 4 Bedroom Flats</div>
-                    <hr>
-                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
-                        Yaba, Lagos
-                    </div>
-                </div>
-                <div class="advert-card-footer">
-                    <button class="button-global advert-card-btn"  onclick="viewProperty()">
-                        View property
-                    </button>
-                </div>
-            </div>
-            <div class="advert-card">
-                <img src="./images/house.jpg" alt="">
-                <div class="price">NGN 50,000.00</div>
-                <div class="advert-card-body">
-                    <div class="title">Fela Plaza</div>
-                    <div class="type"> 4 Bedroom Flats</div>
-                    <hr>
-                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
-                        Yaba, Lagos
-                    </div>
-                </div>
-                <div class="advert-card-footer">
-                    <button class="button-global advert-card-btn"  onclick="viewProperty()">
-                        View property
-                    </button>
-                </div>
-            </div>
-            <div class="advert-card">
-                <img src="./images/house.jpg" alt="">
-                <div class="price">NGN 50,000.00</div>
-                <div class="advert-card-body">
-                    <div class="title">Fela Plaza</div>
-                    <div class="type"> 4 Bedroom Flats</div>
-                    <hr>
-                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
-                        Yaba, Lagos
-                    </div>
-                </div>
-                <div class="advert-card-footer">
-                    <button class="button-global advert-card-btn"  onclick="viewProperty()">
-                        View property
-                    </button>
-                </div>
-            </div>
-            <div class="advert-card">
-                <img src="./images/house.jpg" alt="">
-                <div class="price">NGN 50,000.00</div>
-                <div class="advert-card-body">
-                    <div class="title">Fela Plaza</div>
-                    <div class="type"> 4 Bedroom Flats</div>
-                    <hr>
-                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
-                        Yaba, Lagos
-                    </div>
-                </div>
-                <div class="advert-card-footer">
-                    <button class="button-global advert-card-btn"  onclick="viewProperty()">
-                        View property
-                    </button>
-                </div>
-            </div>
-            <div class="advert-card">
-                <img src="./images/house.jpg" alt="">
-                <div class="price">NGN 50,000.00</div>
-                <div class="advert-card-body">
-                    <div class="title">Fela Plaza</div>
-                    <div class="type"> 4 Bedroom Flats</div>
-                    <hr>
-                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
-                        Yaba, Lagos
-                    </div>
-                </div>
-                <div class="advert-card-footer">
-                    <button class="button-global advert-card-btn"  onclick="viewProperty()">
-                        View property
-                    </button>
-                </div>
-            </div>
-            <div class="advert-card">
-                <img src="./images/house.jpg" alt="">
-                <div class="price">NGN 50,000.00</div>
-                <div class="advert-card-body">
-                    <div class="title">Fela Plaza</div>
-                    <div class="type"> 4 Bedroom Flats</div>
-                    <hr>
-                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
-                        Yaba, Lagos
-                    </div>
-                </div>
-                <div class="advert-card-footer">
-                    <button class="button-global advert-card-btn"  onclick="viewProperty()">
-                        View property
-                    </button>
-                </div>
-            </div>
+
         </div>
     </section>
     <script src="./js/main.js"></script>
+    <script src="./js/list.js"></script>
     <footer>
         <p> &copy PropertyPro-lite - 2019</p>
     </footer>

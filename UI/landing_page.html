@@ -13,11 +13,12 @@
         try {
             const decoded = jwt_decode(token);
             const expiryTime = new Date(decoded.exp * 1000).getTime();
-            console.log("TCL: expiryTime", new Date().getTime())
-            if (new Date().getTime() > expiryTime) {} else {
+            if (new Date().getTime() > expiryTime) {
                 window.location.replace('./login.html');
             }
-        } catch (e) {}
+        } catch (e) {
+            window.location.replace('./login.html');
+        }
     </script>
 </head>
 
@@ -29,9 +30,8 @@
                 <h1>Property Pro Lite</h1>
             </div>
             <nav class="topnav" id="myTopnav">
-                <a href="index.html" class="active">Home</a>
-                <a href="signup.html">Create an Account</a>
-                <a href="login.html">Login</a>
+                <a href="landing_page.html" class="active">Home</a>
+                <a href="#." id="logoutBtn">Logout</a>
                 <a href="#." class="icon">
                     <i class="fa fa-bars"></i>
                 </a>
@@ -64,100 +64,22 @@
     </section>
 
     <section id="recent-posts" class="mt-40">
-        <div class="container">
+        <div class="container" id="adverts">
             <h1 class="title ">
                 Recent Property Adverts
             </h1>
-            <div class="advert-card">
-                <img src="./images/house.jpg" alt="">
-                <div class="price">NGN 50,000.00</div>
-                <div class="advert-card-body">
-                    <div class="title">Fela Plaza</div>
-                    <div class="type"> 4 Bedroom Flats</div>
-                    <hr>
-                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
-                        Yaba, Lagos
-                    </div>
-                </div>
-                <div class="advert-card-footer">
-                    <button class="button-global advert-card-btn" onclick="viewProperty()">
-                        View property
-                    </button>
-                </div>
+            <div class="loader">
+                <img src="./images/loader.gif" alt="">
             </div>
-            <div class="advert-card">
-                <img src="./images/house.jpg" alt="">
-                <div class="price">NGN 50,000.00</div>
-                <div class="advert-card-body">
-                    <div class="title">Fela Plaza</div>
-                    <div class="type"> 4 Bedroom Flats</div>
-                    <hr>
-                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
-                        Yaba, Lagos
-                    </div>
-                </div>
-                <div class="advert-card-footer">
-                    <button class="button-global advert-card-btn" onclick="viewProperty()">
-                        View property
-                    </button>
-                </div>
+            <div class="alert">
             </div>
-            <div class="advert-card">
-                <img src="./images/house.jpg" alt="">
-                <div class="price">NGN 50,000.00</div>
-                <div class="advert-card-body">
-                    <div class="title">Fela Plaza</div>
-                    <div class="type"> 4 Bedroom Flats</div>
-                    <hr>
-                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
-                        Yaba, Lagos
-                    </div>
-                </div>
-                <div class="advert-card-footer">
-                    <button class="button-global advert-card-btn" onclick="viewProperty()">
-                        View property
-                    </button>
-                </div>
-            </div>
-            <div class="advert-card">
-                <img src="./images/house.jpg" alt="">
-                <div class="price">NGN 50,000.00</div>
-                <div class="advert-card-body">
-                    <div class="title">Fela Plaza</div>
-                    <div class="type"> 4 Bedroom Flats</div>
-                    <hr>
-                    <div class="location"><img src="./images/icons8-map-24.png" class="map-icon" alt="">
-                        Yaba, Lagos
-                    </div>
-                </div>
-                <div class="advert-card-footer">
-                    <button class="button-global advert-card-btn" onclick="viewProperty()">
-                        View property
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section id="about-texts">
-        <div class="container">
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima perspiciatis illo nisi, officia,
-                dolorem ut molestias tempore atque,
-                obcaecati recusandae impedit tenetur vero officiis. Soluta laudantium sequi non ipsum quo!
-            </p>
+           
         </div>
-    </section>
-    <section id="intro-texts">
         <div class="container">
-            <div class="expore-texts">
-                <h2>I want to Rent or Buy properties</h2>
-                <a href="./lists.html" class="button-global btn-primary">Explore</a>
-            </div>
-            <div class="agents-texts">
-                <h2>I want to post properties adverts</h2>
-                <a href="agent_ads.html" class="button-global btn-primary">Become an Agent</a>
-            </div>
+           
+            <a href="./lists.html" class="explore-btn">Explore More</a>
+    
         </div>
     </section>
 

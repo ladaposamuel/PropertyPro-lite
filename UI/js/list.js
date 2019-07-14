@@ -33,7 +33,7 @@ const advertCard = resp => ` <div class="advert-card">
   
 `;
 loader.style.display = 'block';
-const advertPosts = response => response.slice(0, 4).map(advertCard);
+const advertPosts = response => response.map(advertCard);
 
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
