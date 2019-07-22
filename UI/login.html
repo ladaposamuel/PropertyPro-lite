@@ -8,10 +8,11 @@
       const decoded = jwt_decode(token);
       const expiryTime = new Date(decoded.exp * 1000).getTime();
       if (new Date().getTime() > expiryTime) {} else {
-        alert('You\'re already loggedin');
         window.location.replace('./landing_page.html');
       }
-    } catch (e) {}
+    } catch (e) {
+
+    }
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
