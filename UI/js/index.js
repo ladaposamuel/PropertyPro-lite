@@ -25,7 +25,7 @@ const advertCard = resp => ` <div class="advert-card">
     </div>
 </div>
 <div class="advert-card-footer">
-    <button class="button-global advert-card-btn" onclick="viewProperty()">
+    <button class="button-global advert-card-btn" onclick="viewProperty(${resp.id})">
         View property
     </button>
 </div>
@@ -58,3 +58,8 @@ fetch(`${url}property`, {
   .catch((error) => {
     console.log(JSON.stringify(error));
   });
+
+const viewProperty = (id) => {
+  localStorage.setItem('propertyId', id);
+  location.href = './view_ad.html';
+};

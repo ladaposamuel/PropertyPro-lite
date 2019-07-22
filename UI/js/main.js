@@ -1,4 +1,6 @@
 const navbar = document.getElementById('myTopnav');
+// const viewAdBtn = document.querySelector('.advert-card-btn');
+// console.log('TCL: viewAdBtn', viewAdBtn);
 
 const mobileMenu = () => {
   if (navbar.className === 'topnav') {
@@ -8,8 +10,5 @@ const mobileMenu = () => {
   }
 };
 
-const viewProperty = () => {
-  location.href = './view_ad.html';
-};
 
 navbar.addEventListener('click', mobileMenu);

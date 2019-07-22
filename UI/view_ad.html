@@ -7,6 +7,20 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="./styles/style.css">
     <title>Property Pro Lite</title>
+    <script src="./js/jwt-decode.min.js"></script>
+    <script>
+        const token = localStorage.getItem('token');
+        const OwnerField = document.querySelector('.owner-field');
+        try {
+            const decoded = jwt_decode(token);
+            const expiryTime = new Date(decoded.exp * 1000).getTime();
+            if (new Date().getTime() > expiryTime) {
+                window.location.replace('./login.html');
+            }
+        } catch (e) {
+            window.location.replace('./login.html');
+        }
+    </script>
 </head>
 
 <body>
@@ -17,7 +31,7 @@
                 <h1>Property Pro Lite</h1>
             </div>
             <nav class="topnav" id="myTopnav">
-                <a href="index.html" class="active">Home</a>
+                <a href="landing_page.html" class="active">Home</a>
                 <a href="#." id="signout">Logout</a>
                 <a href="javascript:void(0);" class="icon" onclick="mobileMenu()">
                     <i class="fa fa-bars"></i>
@@ -60,24 +74,14 @@
             </h1>
             <a href="lists.html"><span>Go Back to Listings</span></a>
             <div class="single-advert-card">
-                <img src="./images/house.jpg" alt="" class="single-advert-img">
-
-                <hr>
-                <div class="single-advert-body">
-                    <ul>
-                        <li><b>Owner: </b>Hello</li>
-                        <li><b>City:</b> Ibadan</li>
-                        <li><b>Address:</b> Ibadan</li>
-                        <li><b>Owner Phone:</b> 09929929992</li>
-
-                    </ul>
+                <div class="loader">
+                    <img src="./images/loader.gif" alt="">
                 </div>
-
-                <button class="button-global mt-40">Send Email to Owner</button>
             </div>
         </div>
     </section>
     <script src="./js/main.js"></script>
+    <script src="./js/view_ad.js"></script>
     <script src="./js/signout.js"></script>
     <footer>
         <p> &copy PropertyPro-lite - 2019</p>
