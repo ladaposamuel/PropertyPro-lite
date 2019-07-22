@@ -9,11 +9,16 @@
     <title>Property Pro Lite</title>
     <script src="./js/jwt-decode.min.js"></script>
     <script>
+        const agentBtn = document.querySelector('#agentBtn');
+        agentBtn.style.display = 'none';
         const token = localStorage.getItem('token');
         try {
             const decoded = jwt_decode(token);
             const expiryTime = new Date(decoded.exp * 1000).getTime();
             if (new Date().getTime() > expiryTime) {
+                if(decoded.is_admin === 1){
+                    agentBtn.style.display = 'block';
+                }
                 window.location.replace('./login.html');
             }
         } catch (e) {
@@ -31,6 +36,7 @@
             </div>
             <nav class="topnav" id="myTopnav">
                 <a href="landing_page.html" class="active">Home</a>
+                <a href="agent_ads.html"  id="agentBtn">Agent Dashboard</a>
                 <a href="#" id="signout">Logout</a>
                 <a href="#." class="icon">
                     <i class="fa fa-bars"></i>
@@ -74,12 +80,12 @@
             <div class="alert">
             </div>
 
-           
+
         </div>
         <div class="container">
-           
+
             <a href="./lists.html" class="explore-btn">Explore More</a>
-    
+
         </div>
     </section>
 

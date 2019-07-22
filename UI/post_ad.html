@@ -7,6 +7,20 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="./styles/style.css">
     <title>Property Pro Lite</title>
+    <script src="./js/jwt-decode.min.js"></script>
+    <script>
+        const token = localStorage.getItem('token');
+        const OwnerField = document.querySelector('.owner-field');
+        try {
+            const decoded = jwt_decode(token);
+            const expiryTime = new Date(decoded.exp * 1000).getTime();
+            if (new Date().getTime() > expiryTime) {
+                window.location.replace('./login.html');
+            }
+        } catch (e) {
+            window.location.replace('./login.html');
+        }
+    </script>
 </head>
 
 <body>
@@ -16,12 +30,12 @@
                 <h1>Property Pro Lite</h1>
             </div>
             <nav class="topnav" id="myTopnav">
-                <a href="index.html" >Home</a>
+                <a href="index.html">Home</a>
                 <a href="post_ad.html" class="active">Post a Property</a>
-                <a href="signup.html">Create an Account</a>
-                <a href="login.html">Login</a>
+                <a href="agent_ads.html">Manage Properties</a>
+                <a href="#" id="signout">Logout</a>
                 <a href="javascript:void(0);" class="icon" onclick="mobileMenu()">
-                  <i class="fa fa-bars"></i>
+                    <i class="fa fa-bars"></i>
                 </a>
             </nav>
         </div>
@@ -34,30 +48,35 @@
                 Post a new Property
             </h1>
             <div class="form">
-                <form action="">
+                <div class="alert">
 
-                    <input type="email" placeholder="Owner's Email">
-                    <input type="text" placeholder="Owner's Phone">
-                    <input type="text" placeholder="Price">
-                    <input type="text" placeholder="City">
-                    <input type="text" placeholder="State">
-                    <select name="" id="">
+                </div>
+                <form action="#." id="new_ad">
+
+          
+                    <input type="text" name="price" placeholder="Price" class="price-field">
+                    <input type="text" name="city" placeholder="City" class="city-field">
+                    <input type="text" name="state" placeholder="State" class="state-field">
+
+                    <select name="type" id="" class="type-field">
                         <option value=""> Select a type</option>
+                        <option value="2 bedroom"> 2 Bedroom</option>
+                        <option value="3 bedroom"> 3 Bedroom</option>
+                        <option value="flat"> Flat</option>
+
                     </select>
 
-                    <select name="">
-                        <option value=""> Rent</option>
-                        <option value=""> Sale</option>
-                    </select>
-                    <textarea placeholder="Address" rows="4"></textarea>
-                    <input type="file" placeholder="Image">
+                    <textarea placeholder="Address" name="address" rows="4" class="address-field"></textarea>
+                    <input type="file" placeholder="Image" name="image" accept="image/*" class="image-field">
 
-                    <button class="button-global">Submit</button>
+                    <button class="button-global new-btn">Submit</button>
                 </form>
             </div>
         </div>
     </section>
     <script src="./js/main.js"></script>
+    <script src="./js/post_ad.js"></script>
+    <script src="./js/signout.js"></script>
     <footer>
         <p> &copy PropertyPro-lite - 2019</p>
     </footer>
