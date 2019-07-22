@@ -21,17 +21,15 @@ const advertCard = resp => ` <div class="advert-card">
     ${resp.address},
     ${resp.city} ,  
     ${resp.state}
-    
     </div>
 </div>
 <div class="advert-card-footer">
-    <button class="button-global advert-card-btn" onclick="viewProperty()">
+    <button class="button-global advert-card-btn" onclick="viewProperty(${resp.id})">
         View property
     </button>
 </div>
- </div> 
-  
-`;
+ </div>`;
+
 loader.style.display = 'block';
 const advertPosts = response => response.map(advertCard);
 
@@ -46,7 +44,7 @@ fetch(`${url}property`, {
   .then(res => res.json())
   .then((response) => {
     if (response.status === 'error') {
-      setAlert('Invalid email or password', 'alert-warning');
+      setAlert(response.error, 'alert-warning');
     }
     if (response.status === 'success' && response.data.length > 0) {
       loader.style.display = 'none';
@@ -58,3 +56,8 @@ fetch(`${url}property`, {
   .catch((error) => {
     console.log(JSON.stringify(error));
   });
+
+const viewProperty = (id) => {
+  localStorage.setItem('propertyId', id);
+  location.href = './view_ad.html';
+};
